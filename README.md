@@ -33,14 +33,17 @@ We expect to have a maze generation system implemented within 2 weeks along with
 
 Contreras, Jose Alberto Leyva. “How to Train MS-Pac-Man with Reinforcement Learning.” 
 Medium, Analytics Vidhya, 27 May 2021, medium.com/analytics-vidhya/how-to-train-ms-pacman-with-reinforcement-learning-dea714a2365e. 
+
 Ghosh, A., Kale, S., and McAfee, P. (2011). Who moderates the moderators?: crowdsourcing 
 abuse detection in user-generated content. In Proceedings of the 12th ACM conference on Electronic commerce, pages 167–176. ACM. Retrieved from https://cs229.stanford.edu/proj2017/final-reports/5241109.pdf
 
 Gnanasekaran, Abeynaya, Jordi Feliu Faba, and Jing An. (2024) Reinforcement Learning in 
 Pacman. Stanford University, Retrieved from 
 https://cs229.stanford.edu/proj2017/final-reports/5241109.pdf 
+
 NVIDIA. (2020). GameGAN: The AI Model that Recreates PAC-MAN From Scratch—Just by 
 Watching It Being Played. NVIDIA Blog. Retrieved from https://blogs.nvidia.com/blog/gamegan-research-pacman-anniversary/
+
 UC Berkeley CS188 Intro to AI, ai.berkeley.edu/project_overview.html. Accessed 25 Sept. 2024. 
 
 
