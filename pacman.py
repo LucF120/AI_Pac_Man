@@ -7,7 +7,7 @@ import random
 
 gym.register_envs(ale_py)
 
-env = gym.make("ALE/Pacman-v5", render_mode="rgb_array", obs_type="grayscale")
+env = gym.make("ALE/Pacman-v5", render_mode="human", obs_type="grayscale")
 obs, info = env.reset()
 terminated = False
 reward_array = []
@@ -74,11 +74,11 @@ def Q_learning(num_episodes=10, gamma=0.9, epsilon=1, decay_rate=0.999):
     return q_table
 
 
-if __name__ == '__main__':
+def generate_q_table():
     decay_rate = 0.99999
 
     # 1000000
-    Q_table = Q_learning(num_episodes=100, gamma=0.9, epsilon=1, decay_rate=decay_rate)  # Run Q-learning
+    Q_table = Q_learning(num_episodes=2000, gamma=0.9, epsilon=1, decay_rate=decay_rate)  # Run Q-learning
 
     with open('output.txt', 'w') as file:
         for key, values in Q_table.items():
@@ -86,4 +86,37 @@ if __name__ == '__main__':
             values_str = ', '.join(map(str, values))
             # Write the key and values to the file
             file.write(f"{key}: {values_str}\n")
+
+def play_with_q_table():
+    q_table = {}
+    with open('output.txt', 'r') as file:
+        for line in file:
+            # Remove the trailing newline character
+            line = line.strip()
+
+            # Split the line at the first colon to separate the key and values part
+            key, values_str = line.split(':', 1)
+
+            # Split the values part by commas and convert to a list of integers (or whatever type is needed)
+            values = np.array(list(map(float, values_str.split(', '))))
+
+            # Add the key and values to the dictionary
+            q_table[key] = values
+
+    obs, info = env.reset()
+    hashed_obs = hash(obs)
+    while info['lives'] == 4:
+        if hashed_obs not in q_table:
+            action = random.randint(0, 4)
+            print("Obs not included")
+        else:
+            action = np.argmax(q_table[hashed_obs])
+        new_obs, reward, terminated, truncated, info = env.step(action)
+
+        hashed_obs = hash(new_obs)
+
+if __name__ == '__main__':
+    #generate_q_table()
+    play_with_q_table()
+
 env.close()
