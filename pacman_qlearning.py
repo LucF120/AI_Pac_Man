@@ -3,7 +3,7 @@ import ale_py
 import random 
 from tqdm import tqdm
 import numpy as np 
-
+import pickle
 import hashlib
 import numpy as np
 
@@ -65,4 +65,6 @@ decay_rate = 0.99999
 
 Q_table = Q_learning(num_episodes=100, gamma=0.9, epsilon=1, decay_rate=decay_rate) # Run Q-learning
 
-print(len(Q_table.keys()))
+# # Save the Q-table dict to a file
+with open('Q_table.pickle', 'wb') as handle:
+    pickle.dump(Q_table, handle, protocol=pickle.HIGHEST_PROTOCOL)
