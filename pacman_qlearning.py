@@ -35,49 +35,31 @@ def calculate_qopt(Q_table, state, reward, gamma, previous_state, previous_actio
     num_updates_matrix[previous_state][previous_action] += 1
  
 def Q_learning(num_episodes=10000, gamma=0.9, epsilon=1, decay_rate=0.999):
-	"""
-	Run Q-learning algorithm for a specified number of episodes.
-
-    Parameters:
-    - num_episodes (int): Number of episodes to run.
-    - gamma (float): Discount factor.
-    - epsilon (float): Exploration rate.
-    - decay_rate (float): Rate at which epsilon decays. Epsilon is decayed as epsilon = epsilon * decay_rate after each episode.
-
-    Returns:
-    - Q_table (dict): Dictionary containing the Q-values for each state-action pair.
-    """
-	Q_table = {}
-	'''
-
-	YOUR CODE HERE
-
-
-	'''
-	num_updates_matrix = {}
-
-	for i in tqdm(range(0, num_episodes)):
-		obs, info = env.reset()
-		previous_state = -1
-		previous_action = -1
-		while True:
-			state = hashlib_hash(obs)
-			if previous_state != -1:
-				calculate_qopt(Q_table, state, reward, gamma, previous_state, previous_action, num_updates_matrix)
-			if np.random.rand() < epsilon:
-				action = np.random.randint(0, 4)
-			else: 
-				action = np.random.randint(0, 4)
-			obs, reward, terminated, truncated, info = env.step(action)
-			if terminated or truncated:
-				previous_state = state
-				state = hashlib_hash(obs)
-				calculate_qopt(Q_table, state, reward, gamma, previous_state, action, num_updates_matrix)
-				break
-			previous_state = state
-			previous_action = action 
-		epsilon *= decay_rate
-	return Q_table
+    Q_table = {}
+    num_updates_matrix = {}
+    for i in tqdm(range(0, num_episodes)):
+        obs, info = env.reset()
+        info["lives"] = 1
+        previous_state = -1
+        previous_action = -1
+        while True:
+            state = hashlib_hash(obs)
+            if previous_state != -1:
+                calculate_qopt(Q_table, state, reward, gamma, previous_state, previous_action, num_updates_matrix)
+            if np.random.rand() < epsilon:
+                action = np.random.randint(0, 4)
+            else: 
+                action = np.argmax(Q_table[state])
+            obs, reward, terminated, truncated, info = env.step(action)
+            if terminated or truncated:
+                previous_state = state
+                state = hashlib_hash(obs)
+                calculate_qopt(Q_table, state, reward, gamma, previous_state, action, num_updates_matrix)
+                break
+            previous_state = state
+            previous_action = action 
+        epsilon *= decay_rate
+    return Q_table
 
 decay_rate = 0.99999
 
