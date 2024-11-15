@@ -166,4 +166,6 @@ for i_episode in range(2):
             episode_durations.append(t + 1)
             break
 
+torch.save(target_net.state_dict(), 'target_net.pth') 
+torch.save(policy_net.state_dict(), 'policy_net.pth')  
 print('Complete')
