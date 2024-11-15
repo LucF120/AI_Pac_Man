@@ -21,4 +21,5 @@ cv2.imshow("Cropped Image", cropped_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
+# The dimensions are down from (250, 160) to (180,160)
 print(cropped_image.shape)

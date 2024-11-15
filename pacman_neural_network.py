@@ -18,7 +18,7 @@ class DQN(nn.Module):
         
         # Fully connected layer
         # The output of the last convolution layer will have shape (64, 26, 17)
-        self.fc1 = nn.Linear(64 * 27 * 16, 512)  # Flatten and pass through a dense layer
+        self.fc1 = nn.Linear(64 * 19 * 16, 512)  # Flatten and pass through a dense layer
         self.fc2 = nn.Linear(512, 5)  # Output layer (for classification)
 
     def forward(self, x):

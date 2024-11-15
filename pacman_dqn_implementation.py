@@ -8,6 +8,7 @@ from pacman_neural_network import DQN
 from collections import namedtuple, deque
 import math 
 from torch import max
+import cv2
 
 # Referenced: https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html
 
@@ -140,11 +141,17 @@ for i_episode in range(num_episodes):
     running_loss = 0.0
     # Initialize the environment and get its state
     state, info = env.reset()
+    #Crop out the score, and blank space at the top of the game 
+    state = state[20:200, 0:]
     state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0)
     state = state.unsqueeze(1)
     for t in count():
         action = select_action(state)
         observation, reward, terminated, truncated, _ = env.step(action.item())
+
+        #Crop out the score, and blank space at the top of the game 
+        observation = observation[20:200, 0:]
+
         reward = torch.tensor([reward], device=device)
         done = terminated or truncated
 
