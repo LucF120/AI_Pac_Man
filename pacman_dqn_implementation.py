@@ -11,6 +11,15 @@ from torch import max
 
 # Referenced: https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html
 
+device = torch.device(
+    "cuda" if torch.cuda.is_available() else
+    "mps" if torch.backends.mps.is_available() else
+    "cpu"
+)
+
+print("Using the following device: ", device)
+
+
 gym.register_envs(ale_py)
 
 env = gym.make("ALE/Pacman-v5", obs_type="grayscale")
@@ -52,8 +61,8 @@ LR = 1e-4
 n_actions = env.action_space.n
 # Get the number of state observations
 state, info = env.reset()
-policy_net = DQN(n_actions)
-target_net = DQN(n_actions)
+policy_net = DQN(n_actions).to(device)
+target_net = DQN(n_actions).to(device)
 target_net.load_state_dict(policy_net.state_dict())
 
 optimizer = torch.optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
@@ -75,7 +84,7 @@ def select_action(state):
             # found, so we pick action with the larger expected reward.
             return policy_net(state).max(1).indices.view(1, 1)
     else:
-        return torch.tensor([[env.action_space.sample()]], dtype=torch.long)
+        return torch.tensor([[env.action_space.sample()]], device=device, dtype=torch.long)
 
 
 episode_durations = []
@@ -92,7 +101,7 @@ def optimize_model():
     # Compute a mask of non-final states and concatenate the batch elements
     # (a final state would've been the one after which simulation ended)
     non_final_mask = torch.tensor(tuple(map(lambda s: s is not None,
-                                          batch.next_state)), dtype=torch.bool)
+                                          batch.next_state)), device=device, dtype=torch.bool)
     non_final_next_states = torch.cat([s for s in batch.next_state
                                                 if s is not None])
     state_batch = torch.cat(batch.state)
@@ -109,7 +118,7 @@ def optimize_model():
     # on the "older" target_net; selecting their best reward with max(1).values
     # This is merged based on the mask, such that we'll have either the expected
     # state value or 0 in case the state was final.
-    next_state_values = torch.zeros(BATCH_SIZE)
+    next_state_values = torch.zeros(BATCH_SIZE, device=device)
     with torch.no_grad():
         next_state_values[non_final_mask] = target_net(non_final_next_states).max(1).values
     # Compute the expected Q values
@@ -126,23 +135,23 @@ def optimize_model():
     torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
     optimizer.step()
 
-for i_episode in range(2):
+for i_episode in range(50):
     print(f"Episode {i_episode}")
     # Initialize the environment and get its state
     state, info = env.reset()
-    state = torch.tensor(state, dtype=torch.float32).unsqueeze(0)
+    state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0)
     state = state.unsqueeze(1)
     for t in count():
         print(f"Count: {t}")
         action = select_action(state)
         observation, reward, terminated, truncated, _ = env.step(action.item())
-        reward = torch.tensor([reward])
+        reward = torch.tensor([reward], device=device)
         done = terminated or truncated
 
         if terminated:
             next_state = None
         else:
-            next_state = torch.tensor(observation, dtype=torch.float32).unsqueeze(0)
+            next_state = torch.tensor(observation, dtype=torch.float32, device=device).unsqueeze(0)
             next_state = next_state.unsqueeze(0)
 
         # Store the transition in memory
