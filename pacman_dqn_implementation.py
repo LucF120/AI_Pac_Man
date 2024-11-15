@@ -51,12 +51,12 @@ class ReplayMemory(object):
 # LR is the learning rate of the ``AdamW`` optimizer
 BATCH_SIZE = 128
 GAMMA = 0.99
-EPS_START = 0.9
+EPS_START = 1
 EPS_END = 0.05
-EPS_DECAY = 1000
+EPS_DECAY = 300000      
 TAU = 0.005
-LR = 1e-4
-
+LR = 1e-5
+num_episodes = 500  
 # Get number of actions from gym action space
 n_actions = env.action_space.n
 # Get the number of state observations
@@ -136,7 +136,7 @@ def optimize_model():
     optimizer.step()
     return loss.item()
 
-for i_episode in range(50):
+for i_episode in range(num_episodes):
     running_loss = 0.0
     # Initialize the environment and get its state
     state, info = env.reset()
