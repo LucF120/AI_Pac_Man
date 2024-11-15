@@ -22,10 +22,11 @@ for i in tqdm(range(10000)):
         observation = new_obs
         # Update rewards
         total_rewards = total_rewards + reward
-
+        print(f"Current Reward: {reward}.       Total Reward: {total_rewards}.      Info: {info}")
         # break this loop if we have reached an end state
         if terminated or truncated:
             obs, info = env.reset()
+            print(info)
             break
     reward_list.append(total_rewards)
     print(total_rewards)
