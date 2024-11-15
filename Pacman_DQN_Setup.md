@@ -8,3 +8,7 @@
 <li>Run: git clone https://github.com/allenyxu2004/CS4100_Pac_Man.git</li>
 <li>cd into project directory, and run: python pacman_dqn_implementation.py</li>
 </ul>
+
+<h3>Visualizing PacMan (If running pacman.py results in: gymnasium RuntimeError: Failed to initialize SDL renderer)</h3>
+<li>Set up the previously mentioned conda environment</li>
+<li>Run: conda install -c conda-forge sdl2</li>
