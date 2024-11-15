@@ -91,7 +91,7 @@ episode_durations = []
 
 def optimize_model():
     if len(memory) < BATCH_SIZE:
-        return
+        return 0
     transitions = memory.sample(BATCH_SIZE)
     # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
     # detailed explanation). This converts batch-array of Transitions
@@ -134,15 +134,15 @@ def optimize_model():
     # In-place gradient clipping
     torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
     optimizer.step()
+    return loss.item()
 
 for i_episode in range(50):
-    print(f"Episode {i_episode}")
+    running_loss = 0.0
     # Initialize the environment and get its state
     state, info = env.reset()
     state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0)
     state = state.unsqueeze(1)
     for t in count():
-        print(f"Count: {t}")
         action = select_action(state)
         observation, reward, terminated, truncated, _ = env.step(action.item())
         reward = torch.tensor([reward], device=device)
@@ -161,7 +161,8 @@ for i_episode in range(50):
         state = next_state
 
         # Perform one step of the optimization (on the policy network)
-        optimize_model()
+        
+        running_loss += optimize_model()
 
         # Soft update of the target network's weights
         # θ′ ← τ θ + (1 −τ )θ′
@@ -174,6 +175,7 @@ for i_episode in range(50):
         if done:
             episode_durations.append(t + 1)
             break
+    print(f"Episode {i_episode} training loss: {running_loss}")
 
 torch.save(target_net.state_dict(), 'target_net.pth') 
 torch.save(policy_net.state_dict(), 'policy_net.pth')  
