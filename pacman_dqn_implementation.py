@@ -216,7 +216,7 @@ for i_episode in range(num_episodes):
 
 torch.save(target_net.state_dict(), 'target_net.pth') 
 torch.save(policy_net.state_dict(), 'policy_net.pth')  
-plt.plot(rewards)
+plt.plot(total_rewards)
 plt.xlabel('Episode')
 plt.ylabel('Total Reward')
 plt.savefig('Rewards_Plot.png', dpi=300, bbox_inches='tight')
