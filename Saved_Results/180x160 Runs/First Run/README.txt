@@ -1,510 +1,511 @@
+#Made losing a life -10 reward, and losing a game -50 reward 
 BATCH_SIZE = 128
 GAMMA = 0.99
 EPS_START = 1
 EPS_END = 0.05
-EPS_DECAY = 300000      
+EPS_DECAY = 300000    
 TAU = 0.005
 LR = 1e-5
-num_episodes = 500  
+num_episodes = 500 
 
-Episode 0 training loss: 10.656000818824396
-Episode 1 training loss: 2.7192784218350425
-Episode 2 training loss: 4.521374888252467
-Episode 3 training loss: 5.496124504134059
-Episode 4 training loss: 6.396459301467985
-Episode 5 training loss: 7.9819314875639975
-Episode 6 training loss: 10.399733671918511
-Episode 7 training loss: 14.956485404632986
-Episode 8 training loss: 13.097318111918867
-Episode 9 training loss: 17.544315364211798
-Episode 10 training loss: 15.715261854231358
-Episode 11 training loss: 25.767275281250477
-Episode 12 training loss: 24.901669495739043
-Episode 13 training loss: 27.72383501753211
-Episode 14 training loss: 25.78405963256955
-Episode 15 training loss: 31.886951573193073
-Episode 16 training loss: 32.522151697427034
-Episode 17 training loss: 54.98572506941855
-Episode 18 training loss: 41.517105082049966
-Episode 19 training loss: 64.52108138240874
-Episode 20 training loss: 73.71380593441427
-Episode 21 training loss: 50.52540152706206
-Episode 22 training loss: 69.69239089824259
-Episode 23 training loss: 57.70413358323276
-Episode 24 training loss: 53.937704782933
-Episode 25 training loss: 55.58314110711217
-Episode 26 training loss: 62.75297684594989
-Episode 27 training loss: 65.43580733425915
-Episode 28 training loss: 77.2404840812087
-Episode 29 training loss: 91.6094539295882
-Episode 30 training loss: 98.8114663567394
-Episode 31 training loss: 69.06841133162379
-Episode 32 training loss: 91.05684918165207
-Episode 33 training loss: 89.58849829621613
-Episode 34 training loss: 119.81656929291785
-Episode 35 training loss: 144.83070994727314
-Episode 36 training loss: 76.74056507647038
-Episode 37 training loss: 82.03525150939822
-Episode 38 training loss: 90.54716465994716
-Episode 39 training loss: 97.76738426834345
-Episode 40 training loss: 98.5485403072089
-Episode 41 training loss: 142.44589595869184
-Episode 42 training loss: 113.244086464867
-Episode 43 training loss: 91.82792040705681
-Episode 44 training loss: 109.14855816029012
-Episode 45 training loss: 154.86627516150475
-Episode 46 training loss: 106.82368005812168
-Episode 47 training loss: 113.46879748255014
-Episode 48 training loss: 135.52267826348543
-Episode 49 training loss: 114.2258028704673
-Episode 50 training loss: 141.21171429380774
-Episode 51 training loss: 188.41355752199888
-Episode 52 training loss: 147.1411558650434
-Episode 53 training loss: 113.098110396415
-Episode 54 training loss: 137.16284300014377
-Episode 55 training loss: 102.51065700873733
-Episode 56 training loss: 192.84862687811255
-Episode 57 training loss: 131.00133982300758
-Episode 58 training loss: 206.83430090919137
-Episode 59 training loss: 142.35314932465553
-Episode 60 training loss: 143.21168471872807
-Episode 61 training loss: 121.80293396487832
-Episode 62 training loss: 160.224179379642
-Episode 63 training loss: 160.11884402483702
-Episode 64 training loss: 146.8157356455922
-Episode 65 training loss: 148.28177177906036
-Episode 66 training loss: 172.5817649140954
-Episode 67 training loss: 174.78556219115853
-Episode 68 training loss: 153.51800793036819
-Episode 69 training loss: 265.4543113447726
-Episode 70 training loss: 192.04658284410834
-Episode 71 training loss: 197.65745139867067
-Episode 72 training loss: 211.90692542865872
-Episode 73 training loss: 278.55929359048605
-Episode 74 training loss: 236.0680319517851
-Episode 75 training loss: 237.3643851056695
-Episode 76 training loss: 233.9308596327901
-Episode 77 training loss: 371.0623738989234
-Episode 78 training loss: 207.49561163783073
-Episode 79 training loss: 220.89017939567566
-Episode 80 training loss: 294.4242082647979
-Episode 81 training loss: 292.45766523480415
-Episode 82 training loss: 254.21266739070415
-Episode 83 training loss: 262.83110991865396
-Episode 84 training loss: 253.72852437198162
-Episode 85 training loss: 218.60780277103186
-Episode 86 training loss: 290.0179521292448
-Episode 87 training loss: 263.42292181402445
-Episode 88 training loss: 221.10302045941353
-Episode 89 training loss: 233.33440064638853
-Episode 90 training loss: 250.03755662590265
-Episode 91 training loss: 227.7390873581171
-Episode 92 training loss: 292.24157482385635
-Episode 93 training loss: 215.92523213475943
-Episode 94 training loss: 275.054975874722
-Episode 95 training loss: 334.9691816419363
-Episode 96 training loss: 262.18655931949615
-Episode 97 training loss: 275.7263535261154
-Episode 98 training loss: 287.74860835820436
-Episode 99 training loss: 315.6046592220664
-Episode 100 training loss: 364.77685701847076
-Episode 101 training loss: 291.2642588466406
-Episode 102 training loss: 435.15370085835457
-Episode 103 training loss: 767.3937865272164
-Episode 104 training loss: 361.1096174940467
-Episode 105 training loss: 523.6251128166914
-Episode 106 training loss: 344.999380543828
-Episode 107 training loss: 515.8528155088425
-Episode 108 training loss: 323.68949419260025
-Episode 109 training loss: 363.72697998583317
-Episode 110 training loss: 327.66527885198593
-Episode 111 training loss: 472.81125174462795
-Episode 112 training loss: 372.5537705421448
-Episode 113 training loss: 306.3009674102068
-Episode 114 training loss: 356.2195524126291
-Episode 115 training loss: 302.5657253116369
-Episode 116 training loss: 338.5576424896717
-Episode 117 training loss: 659.3483261913061
-Episode 118 training loss: 360.0274165570736
-Episode 119 training loss: 359.422498524189
-Episode 120 training loss: 573.2796221971512
-Episode 121 training loss: 446.55296333134174
-Episode 122 training loss: 371.8922805339098
-Episode 123 training loss: 502.2975280433893
-Episode 124 training loss: 418.1751722097397
-Episode 125 training loss: 597.7355487644672
-Episode 126 training loss: 467.08675016462803
-Episode 127 training loss: 516.3500089049339
-Episode 128 training loss: 439.671142116189
-Episode 129 training loss: 555.8763474524021
-Episode 130 training loss: 450.62327305972576
-Episode 131 training loss: 466.2161016613245
-Episode 132 training loss: 443.98526352643967
-Episode 133 training loss: 549.4240128099918
-Episode 134 training loss: 701.2000895440578
-Episode 135 training loss: 513.7531506121159
-Episode 136 training loss: 477.3510884344578
-Episode 137 training loss: 449.6606252640486
-Episode 138 training loss: 839.3961800336838
-Episode 139 training loss: 526.0149539709091
-Episode 140 training loss: 457.2852752506733
-Episode 141 training loss: 886.0182970166206
-Episode 142 training loss: 566.7027620375156
-Episode 143 training loss: 885.489777982235
-Episode 144 training loss: 703.031268298626
-Episode 145 training loss: 730.2086653113365
-Episode 146 training loss: 496.7423665523529
-Episode 147 training loss: 622.1955326795578
-Episode 148 training loss: 640.4577720165253
-Episode 149 training loss: 864.2221270501614
-Episode 150 training loss: 686.5993287861347
-Episode 151 training loss: 698.7006369233131
-Episode 152 training loss: 805.8029856979847
-Episode 153 training loss: 650.7370449602604
-Episode 154 training loss: 601.7870120108128
-Episode 155 training loss: 744.3482258021832
-Episode 156 training loss: 1092.4938099980354
-Episode 157 training loss: 829.7294217050076
-Episode 158 training loss: 637.239483654499
-Episode 159 training loss: 660.5742077231407
-Episode 160 training loss: 669.4724389910698
-Episode 161 training loss: 585.6726241111755
-Episode 162 training loss: 656.00482827425
-Episode 163 training loss: 899.9254502356052
-Episode 164 training loss: 909.9331794381142
-Episode 165 training loss: 744.5983891189098
-Episode 166 training loss: 1083.634798526764
-Episode 167 training loss: 1132.8790454864502
-Episode 168 training loss: 1284.488903582096
-Episode 169 training loss: 914.6094049811363
-Episode 170 training loss: 936.9952747523785
-Episode 171 training loss: 967.5952231287956
-Episode 172 training loss: 738.8292593955994
-Episode 173 training loss: 849.4149737358093
-Episode 174 training loss: 920.0645455121994
-Episode 175 training loss: 881.7388043999672
-Episode 176 training loss: 1073.541277229786
-Episode 177 training loss: 1028.772723019123
-Episode 178 training loss: 883.9335997104645
-Episode 179 training loss: 1035.5871891379356
-Episode 180 training loss: 1169.7224282622337
-Episode 181 training loss: 810.978437423706
-Episode 182 training loss: 1128.6824631094933
-Episode 183 training loss: 1111.294880092144
-Episode 184 training loss: 1007.535193502903
-Episode 185 training loss: 937.7795696854591
-Episode 186 training loss: 879.4036739468575
-Episode 187 training loss: 932.0528247356415
-Episode 188 training loss: 855.6806651353836
-Episode 189 training loss: 776.2989767193794
-Episode 190 training loss: 789.8031060099602
-Episode 191 training loss: 939.004266500473
-Episode 192 training loss: 1040.8067197799683
-Episode 193 training loss: 1113.2506073117256
-Episode 194 training loss: 856.186349183321
-Episode 195 training loss: 1077.7110248208046
-Episode 196 training loss: 841.1731464266777
-Episode 197 training loss: 1083.7898834943771
-Episode 198 training loss: 935.1121643781662
-Episode 199 training loss: 1117.76976197958
-Episode 200 training loss: 1031.057070851326
-Episode 201 training loss: 1213.3070260882378
-Episode 202 training loss: 973.6523844599724
-Episode 203 training loss: 1218.2428315281868
-Episode 204 training loss: 1010.3707844614983
-Episode 205 training loss: 1314.597876548767
-Episode 206 training loss: 1406.9706925749779
-Episode 207 training loss: 836.6049811244011
-Episode 208 training loss: 1104.6656476259232
-Episode 209 training loss: 1213.4409543275833
-Episode 210 training loss: 1392.5062806606293
-Episode 211 training loss: 1009.8112657666206
-Episode 212 training loss: 1167.622412443161
-Episode 213 training loss: 1091.8295778632164
-Episode 214 training loss: 1503.9288022518158
-Episode 215 training loss: 1239.9472636580467
-Episode 216 training loss: 1164.91289716959
-Episode 217 training loss: 1062.8672389388084
-Episode 218 training loss: 983.5586044192314
-Episode 219 training loss: 1588.523431956768
-Episode 220 training loss: 1115.1144320964813
-Episode 221 training loss: 1200.800869166851
-Episode 222 training loss: 1156.8256281614304
-Episode 223 training loss: 1323.1249995827675
-Episode 224 training loss: 988.3232525587082
-Episode 225 training loss: 1589.2861636281013
-Episode 226 training loss: 1201.0097864866257
-Episode 227 training loss: 2100.5861461758614
-Episode 228 training loss: 1255.6771261692047
-Episode 229 training loss: 1167.0970305800438
-Episode 230 training loss: 1192.000008881092
-Episode 231 training loss: 1402.370394051075
-Episode 232 training loss: 1337.5472792387009
-Episode 233 training loss: 1430.9095557928085
-Episode 234 training loss: 1300.178524672985
-Episode 235 training loss: 1341.7419724464417
-Episode 236 training loss: 1931.357698917389
-Episode 237 training loss: 1290.0428654551506
-Episode 238 training loss: 1491.0109317302704
-Episode 239 training loss: 1280.1517181396484
-Episode 240 training loss: 1506.3273500800133
-Episode 241 training loss: 2149.0612580776215
-Episode 242 training loss: 1736.8096160888672
-Episode 243 training loss: 1389.967500448227
-Episode 244 training loss: 1462.4357602596283
-Episode 245 training loss: 1982.4705919027328
-Episode 246 training loss: 2038.609945178032
-Episode 247 training loss: 3418.3796813488007
-Episode 248 training loss: 1737.7741177082062
-Episode 249 training loss: 1730.0399153232574
-Episode 250 training loss: 1752.663629770279
-Episode 251 training loss: 2256.9230390787125
-Episode 252 training loss: 1583.1708118915558
-Episode 253 training loss: 2088.6185842752457
-Episode 254 training loss: 1736.0647609233856
-Episode 255 training loss: 2124.23401594162
-Episode 256 training loss: 2382.2910672426224
-Episode 257 training loss: 1499.7096140384674
-Episode 258 training loss: 2005.7748341560364
-Episode 259 training loss: 1733.3529146909714
-Episode 260 training loss: 1922.8747572898865
-Episode 261 training loss: 1458.3116164207458
-Episode 262 training loss: 1932.4323501586914
-Episode 263 training loss: 1478.034833431244
-Episode 264 training loss: 2369.7894208431244
-Episode 265 training loss: 2205.22121322155
-Episode 266 training loss: 1862.815636754036
-Episode 267 training loss: 1875.5870449543
-Episode 268 training loss: 3087.6870206594467
-Episode 269 training loss: 1755.1101913452148
-Episode 270 training loss: 1749.713499903679
-Episode 271 training loss: 1690.0456203222275
-Episode 272 training loss: 2434.1331839561462
-Episode 273 training loss: 3092.651683330536
-Episode 274 training loss: 2218.017561674118
-Episode 275 training loss: 1719.4000148773193
-Episode 276 training loss: 2266.525661945343
-Episode 277 training loss: 1992.431346654892
-Episode 278 training loss: 2193.122329235077
-Episode 279 training loss: 2071.547307729721
-Episode 280 training loss: 2006.2237157821655
-Episode 281 training loss: 2191.2588391304016
-Episode 282 training loss: 2450.3854051828384
-Episode 283 training loss: 2573.616963505745
-Episode 284 training loss: 1851.425121307373
-Episode 285 training loss: 2067.9847152233124
-Episode 286 training loss: 2091.1973444223404
-Episode 287 training loss: 1660.5604095458984
-Episode 288 training loss: 2276.511171221733
-Episode 289 training loss: 2816.5317437648773
-Episode 290 training loss: 2211.4203782081604
-Episode 291 training loss: 2291.969404220581
-Episode 292 training loss: 2447.6541134119034
-Episode 293 training loss: 2571.5128692388535
-Episode 294 training loss: 2164.7309840917587
-Episode 295 training loss: 1926.2369179725647
-Episode 296 training loss: 2452.3935354948044
-Episode 297 training loss: 2595.104718208313
-Episode 298 training loss: 2658.3856749534607
-Episode 299 training loss: 2228.7228758335114
-Episode 300 training loss: 2359.501822948456
-Episode 301 training loss: 2714.9974411726
-Episode 302 training loss: 2818.5022926330566
-Episode 303 training loss: 2845.5645673274994
-Episode 304 training loss: 4210.982618808746
-Episode 305 training loss: 2540.1853172779083
-Episode 306 training loss: 3018.215288877487
-Episode 307 training loss: 2969.313481092453
-Episode 308 training loss: 2554.7079770565033
-Episode 309 training loss: 3339.0893392562866
-Episode 310 training loss: 2629.536234140396
-Episode 311 training loss: 2779.9875354766846
-Episode 312 training loss: 2683.3635396957397
-Episode 313 training loss: 2689.5214099884033
-Episode 314 training loss: 3326.133993625641
-Episode 315 training loss: 2753.5033388137817
-Episode 316 training loss: 2390.507449388504
-Episode 317 training loss: 2501.548357486725
-Episode 318 training loss: 2600.920200586319
-Episode 319 training loss: 3153.0955986976624
-Episode 320 training loss: 2414.896454334259
-Episode 321 training loss: 2446.0353833436966
-Episode 322 training loss: 3186.7090487480164
-Episode 323 training loss: 3475.5266268253326
-Episode 324 training loss: 2377.5547943115234
-Episode 325 training loss: 3547.826177597046
-Episode 326 training loss: 2705.5955584049225
-Episode 327 training loss: 2862.82546210289
-Episode 328 training loss: 3070.3953013420105
-Episode 329 training loss: 3789.6545259952545
-Episode 330 training loss: 4984.189863681793
-Episode 331 training loss: 4516.399429559708
-Episode 332 training loss: 3470.1830229759216
-Episode 333 training loss: 3107.244252681732
-Episode 334 training loss: 3442.051260948181
-Episode 335 training loss: 3593.7698681354523
-Episode 336 training loss: 3923.0441229343414
-Episode 337 training loss: 2603.831141233444
-Episode 338 training loss: 4626.943430900574
-Episode 339 training loss: 3477.3390271663666
-Episode 340 training loss: 4041.901113986969
-Episode 341 training loss: 4079.9491403102875
-Episode 342 training loss: 4473.66886973381
-Episode 343 training loss: 4978.357739448547
-Episode 344 training loss: 4332.05815410614
-Episode 345 training loss: 4316.2013330459595
-Episode 346 training loss: 4584.014973640442
-Episode 347 training loss: 2652.633484363556
-Episode 348 training loss: 3929.859796524048
-Episode 349 training loss: 4049.150049686432
-Episode 350 training loss: 4336.631938457489
-Episode 351 training loss: 4355.589426517487
-Episode 352 training loss: 3564.7331008911133
-Episode 353 training loss: 4681.657193183899
-Episode 354 training loss: 5936.588927984238
-Episode 355 training loss: 2995.6080255508423
-Episode 356 training loss: 4286.997354507446
-Episode 357 training loss: 3945.762316942215
-Episode 358 training loss: 4849.5178835392
-Episode 359 training loss: 4291.679966211319
-Episode 360 training loss: 3835.4501008987427
-Episode 361 training loss: 3866.823010444641
-Episode 362 training loss: 4862.5711007118225
-Episode 363 training loss: 4068.1069321632385
-Episode 364 training loss: 4148.57817363739
-Episode 365 training loss: 4762.638653278351
-Episode 366 training loss: 4394.14182472229
-Episode 367 training loss: 4922.034517288208
-Episode 368 training loss: 5313.479326725006
-Episode 369 training loss: 4497.4060525894165
-Episode 370 training loss: 4131.412655353546
-Episode 371 training loss: 4369.255067825317
-Episode 372 training loss: 5964.90969991684
-Episode 373 training loss: 5196.422760486603
-Episode 374 training loss: 4344.951134681702
-Episode 375 training loss: 4487.597569465637
-Episode 376 training loss: 5830.22020149231
-Episode 377 training loss: 4282.991075515747
-Episode 378 training loss: 5257.743346214294
-Episode 379 training loss: 5765.643710136414
-Episode 380 training loss: 4276.329888820648
-Episode 381 training loss: 5828.334839344025
-Episode 382 training loss: 6282.131142616272
-Episode 383 training loss: 5065.231817245483
-Episode 384 training loss: 5486.636785507202
-Episode 385 training loss: 3861.801344871521
-Episode 386 training loss: 3875.323949813843
-Episode 387 training loss: 5819.141726493835
-Episode 388 training loss: 4938.2676820755005
-Episode 389 training loss: 4282.2892327308655
-Episode 390 training loss: 4844.650743484497
-Episode 391 training loss: 3747.617488861084
-Episode 392 training loss: 5029.31192278862
-Episode 393 training loss: 6235.1654806137085
-Episode 394 training loss: 5119.006331443787
-Episode 395 training loss: 4915.658058166504
-Episode 396 training loss: 4584.785489082336
-Episode 397 training loss: 4596.765245437622
-Episode 398 training loss: 5259.842327594757
-Episode 399 training loss: 7599.876341819763
-Episode 400 training loss: 3856.4882135391235
-Episode 401 training loss: 4285.975687503815
-Episode 402 training loss: 5009.257140636444
-Episode 403 training loss: 5164.057367801666
-Episode 404 training loss: 5235.257722377777
-Episode 405 training loss: 6378.0683670043945
-Episode 406 training loss: 5660.497141838074
-Episode 407 training loss: 4663.9677929878235
-Episode 408 training loss: 5259.550896644592
-Episode 409 training loss: 4319.585505962372
-Episode 410 training loss: 5414.3022537231445
-Episode 411 training loss: 5494.250654697418
-Episode 412 training loss: 6936.41800403595
-Episode 413 training loss: 6586.622962474823
-Episode 414 training loss: 4339.322963237762
-Episode 415 training loss: 5201.481596946716
-Episode 416 training loss: 5543.459991931915
-Episode 417 training loss: 5686.580146312714
-Episode 418 training loss: 5090.544853687286
-Episode 419 training loss: 5993.886625289917
-Episode 420 training loss: 4711.143086910248
-Episode 421 training loss: 5492.814400672913
-Episode 422 training loss: 4808.161900043488
-Episode 423 training loss: 7269.611091136932
-Episode 424 training loss: 5925.567132949829
-Episode 425 training loss: 7432.5412521362305
-Episode 426 training loss: 4481.487635612488
-Episode 427 training loss: 6092.065193653107
-Episode 428 training loss: 4643.862842082977
-Episode 429 training loss: 5047.8619928359985
-Episode 430 training loss: 6396.90140914917
-Episode 431 training loss: 7548.8463768959045
-Episode 432 training loss: 4834.088376045227
-Episode 433 training loss: 5502.831356525421
-Episode 434 training loss: 7656.247937679291
-Episode 435 training loss: 6683.304843902588
-Episode 436 training loss: 6501.6892857551575
-Episode 437 training loss: 7504.72816324234
-Episode 438 training loss: 6029.659161567688
-Episode 439 training loss: 6944.429439067841
-Episode 440 training loss: 7369.167743682861
-Episode 441 training loss: 6490.703813076019
-Episode 442 training loss: 10270.524440288544
-Episode 443 training loss: 7865.323919773102
-Episode 444 training loss: 6009.518295764923
-Episode 445 training loss: 5487.107318401337
-Episode 446 training loss: 6997.322091579437
-Episode 447 training loss: 7567.512545108795
-Episode 448 training loss: 7109.941048622131
-Episode 449 training loss: 7213.130073547363
-Episode 450 training loss: 7306.109010219574
-Episode 451 training loss: 6466.21005487442
-Episode 452 training loss: 5322.318075180054
-Episode 453 training loss: 7897.749536037445
-Episode 454 training loss: 6514.253213405609
-Episode 455 training loss: 5981.291916370392
-Episode 456 training loss: 5442.43165063858
-Episode 457 training loss: 8655.218315124512
-Episode 458 training loss: 6822.584262371063
-Episode 459 training loss: 7118.114149093628
-Episode 460 training loss: 12155.845896244049
-Episode 461 training loss: 6184.014919281006
-Episode 462 training loss: 9179.00279045105
-Episode 463 training loss: 5530.0579471588135
-Episode 464 training loss: 6848.5171818733215
-Episode 465 training loss: 9199.420770645142
-Episode 466 training loss: 6947.61412858963
-Episode 467 training loss: 7197.641952037811
-Episode 468 training loss: 6513.220675468445
-Episode 469 training loss: 5143.509359836578
-Episode 470 training loss: 7155.837196350098
-Episode 471 training loss: 7609.593725204468
-Episode 472 training loss: 5656.537477016449
-Episode 473 training loss: 6258.500214099884
-Episode 474 training loss: 8328.698959827423
-Episode 475 training loss: 8056.469038963318
-Episode 476 training loss: 6627.232033729553
-Episode 477 training loss: 6174.321388721466
-Episode 478 training loss: 5480.057621479034
-Episode 479 training loss: 5867.531061172485
-Episode 480 training loss: 5420.680070877075
-Episode 481 training loss: 7564.076614379883
-Episode 482 training loss: 5344.793885707855
-Episode 483 training loss: 5809.333448886871
-Episode 484 training loss: 6807.035247802734
-Episode 485 training loss: 5696.806832313538
-Episode 486 training loss: 5935.649331569672
-Episode 487 training loss: 7780.791243553162
-Episode 488 training loss: 6520.795093536377
-Episode 489 training loss: 5426.908346652985
-Episode 490 training loss: 4368.662333011627
-Episode 491 training loss: 7879.46670627594
-Episode 492 training loss: 6329.1992654800415
-Episode 493 training loss: 6024.047299861908
-Episode 494 training loss: 5856.628913402557
-Episode 495 training loss: 6560.739260196686
-Episode 496 training loss: 5974.930300235748
-Episode 497 training loss: 7479.526991844177
-Episode 498 training loss: 5026.592186450958
-Episode 499 training loss: 6007.038586139679
+Episode 0 training loss: 34.11851961584762.          Total Reward: -67.0
+Episode 1 training loss: 62.63678400916979.          Total Reward: -68.0
+Episode 2 training loss: 82.61867790482938.          Total Reward: -68.0
+Episode 3 training loss: 89.57046552561224.          Total Reward: -69.0
+Episode 4 training loss: 110.10512288659811.          Total Reward: -66.0
+Episode 5 training loss: 64.8560853684321.          Total Reward: -71.0
+Episode 6 training loss: 92.17947842180729.          Total Reward: -67.0
+Episode 7 training loss: 133.273368537426.          Total Reward: -54.0
+Episode 8 training loss: 96.60998534783721.          Total Reward: -69.0
+Episode 9 training loss: 80.04109115898609.          Total Reward: -69.0
+Episode 10 training loss: 92.17886072024703.          Total Reward: -65.0
+Episode 11 training loss: 88.09938849322498.          Total Reward: -68.0
+Episode 12 training loss: 110.52718163840473.          Total Reward: -67.0
+Episode 13 training loss: 105.15184599906206.          Total Reward: -65.0
+Episode 14 training loss: 110.08209716528654.          Total Reward: -68.0
+Episode 15 training loss: 110.23328056931496.          Total Reward: -71.0
+Episode 16 training loss: 149.1567256823182.          Total Reward: -55.0
+Episode 17 training loss: 108.3226254619658.          Total Reward: -62.0
+Episode 18 training loss: 134.62532637268305.          Total Reward: -66.0
+Episode 19 training loss: 100.12426386401057.          Total Reward: -70.0
+Episode 20 training loss: 141.82150395959616.          Total Reward: -63.0
+Episode 21 training loss: 177.36188274621964.          Total Reward: -57.0
+Episode 22 training loss: 129.74624130129814.          Total Reward: -66.0
+Episode 23 training loss: 123.44114391878247.          Total Reward: -72.0
+Episode 24 training loss: 136.66634584590793.          Total Reward: -67.0
+Episode 25 training loss: 153.27794174477458.          Total Reward: -64.0
+Episode 26 training loss: 172.29065661132336.          Total Reward: -66.0
+Episode 27 training loss: 133.95838188380003.          Total Reward: -68.0
+Episode 28 training loss: 157.96554747223854.          Total Reward: -70.0
+Episode 29 training loss: 149.19394125044346.          Total Reward: -74.0
+Episode 30 training loss: 142.5697234943509.          Total Reward: -73.0
+Episode 31 training loss: 173.40006605908275.          Total Reward: -64.0
+Episode 32 training loss: 298.9802490361035.          Total Reward: -63.0
+Episode 33 training loss: 174.76747423037887.          Total Reward: -59.0
+Episode 34 training loss: 209.70281299576163.          Total Reward: -67.0
+Episode 35 training loss: 171.60061552375555.          Total Reward: -61.0
+Episode 36 training loss: 167.94167557358742.          Total Reward: -63.0
+Episode 37 training loss: 186.53618836402893.          Total Reward: -60.0
+Episode 38 training loss: 248.03051048889756.          Total Reward: -59.0
+Episode 39 training loss: 166.87742491811514.          Total Reward: -67.0
+Episode 40 training loss: 225.24137593060732.          Total Reward: -61.0
+Episode 41 training loss: 364.5998436808586.          Total Reward: -43.0
+Episode 42 training loss: 200.44001471623778.          Total Reward: -67.0
+Episode 43 training loss: 196.46612635999918.          Total Reward: -56.0
+Episode 44 training loss: 272.3136495575309.          Total Reward: -47.0
+Episode 45 training loss: 180.5994283258915.          Total Reward: -70.0
+Episode 46 training loss: 170.72901716828346.          Total Reward: -67.0
+Episode 47 training loss: 221.15653251856565.          Total Reward: -57.0
+Episode 48 training loss: 265.3787304311991.          Total Reward: -54.0
+Episode 49 training loss: 188.3067506812513.          Total Reward: -68.0
+Episode 50 training loss: 197.17289444059134.          Total Reward: -71.0
+Episode 51 training loss: 204.79940114170313.          Total Reward: -67.0
+Episode 52 training loss: 213.44579125195742.          Total Reward: -65.0
+Episode 53 training loss: 227.95418271422386.          Total Reward: -63.0
+Episode 54 training loss: 279.87322445213795.          Total Reward: -63.0
+Episode 55 training loss: 244.1745011806488.          Total Reward: -66.0
+Episode 56 training loss: 300.2187467850745.          Total Reward: -59.0
+Episode 57 training loss: 272.03926910459995.          Total Reward: -61.0
+Episode 58 training loss: 236.10742547363043.          Total Reward: -66.0
+Episode 59 training loss: 222.55386491119862.          Total Reward: -68.0
+Episode 60 training loss: 347.5173956602812.          Total Reward: -56.0
+Episode 61 training loss: 396.24837159365416.          Total Reward: 14.0
+Episode 62 training loss: 315.48497174680233.          Total Reward: -66.0
+Episode 63 training loss: 460.45784133672714.          Total Reward: -20.0
+Episode 64 training loss: 285.7140540406108.          Total Reward: -65.0
+Episode 65 training loss: 378.92751175165176.          Total Reward: -65.0
+Episode 66 training loss: 297.0121167898178.          Total Reward: -59.0
+Episode 67 training loss: 251.67039631307125.          Total Reward: -67.0
+Episode 68 training loss: 259.46911934018135.          Total Reward: -67.0
+Episode 69 training loss: 224.96642631292343.          Total Reward: -75.0
+Episode 70 training loss: 310.36512737721205.          Total Reward: -67.0
+Episode 71 training loss: 303.5794169008732.          Total Reward: -70.0
+Episode 72 training loss: 319.58731476962566.          Total Reward: -65.0
+Episode 73 training loss: 483.13624808192253.          Total Reward: -65.0
+Episode 74 training loss: 278.5996494740248.          Total Reward: -73.0
+Episode 75 training loss: 419.6341009289026.          Total Reward: -59.0
+Episode 76 training loss: 305.2087282538414.          Total Reward: -61.0
+Episode 77 training loss: 297.0095817297697.          Total Reward: -65.0
+Episode 78 training loss: 259.0897669941187.          Total Reward: -69.0
+Episode 79 training loss: 353.30001816153526.          Total Reward: -64.0
+Episode 80 training loss: 420.1457162871957.          Total Reward: -68.0
+Episode 81 training loss: 340.7868636250496.          Total Reward: -67.0
+Episode 82 training loss: 418.2522266805172.          Total Reward: -58.0
+Episode 83 training loss: 401.7411478459835.          Total Reward: -65.0
+Episode 84 training loss: 299.05821520090103.          Total Reward: -70.0
+Episode 85 training loss: 310.70855301618576.          Total Reward: -65.0
+Episode 86 training loss: 338.5223996937275.          Total Reward: -63.0
+Episode 87 training loss: 330.9462611377239.          Total Reward: -64.0
+Episode 88 training loss: 351.4014998972416.          Total Reward: -67.0
+Episode 89 training loss: 318.2964630275965.          Total Reward: -70.0
+Episode 90 training loss: 425.8233649581671.          Total Reward: -58.0
+Episode 91 training loss: 432.47088737785816.          Total Reward: -66.0
+Episode 92 training loss: 349.6078525930643.          Total Reward: -73.0
+Episode 93 training loss: 326.28902718424797.          Total Reward: -72.0
+Episode 94 training loss: 497.66239789128304.          Total Reward: -53.0
+Episode 95 training loss: 337.96662095189095.          Total Reward: -69.0
+Episode 96 training loss: 393.12376832962036.          Total Reward: -65.0
+Episode 97 training loss: 455.978756159544.          Total Reward: -61.0
+Episode 98 training loss: 501.8077761977911.          Total Reward: -52.0
+Episode 99 training loss: 365.22366839647293.          Total Reward: -66.0
+Episode 100 training loss: 475.7021603733301.          Total Reward: -63.0
+Episode 101 training loss: 410.43083426356316.          Total Reward: -68.0
+Episode 102 training loss: 476.07273449003696.          Total Reward: -65.0
+Episode 103 training loss: 472.8392963707447.          Total Reward: -62.0
+Episode 104 training loss: 471.4372914135456.          Total Reward: -69.0
+Episode 105 training loss: 519.9590215086937.          Total Reward: -62.0
+Episode 106 training loss: 406.29034808278084.          Total Reward: -68.0
+Episode 107 training loss: 398.90551176667213.          Total Reward: -68.0
+Episode 108 training loss: 573.6172686070204.          Total Reward: -61.0
+Episode 109 training loss: 454.74887055158615.          Total Reward: -68.0
+Episode 110 training loss: 404.2815520018339.          Total Reward: -67.0
+Episode 111 training loss: 481.83245818316936.          Total Reward: -67.0
+Episode 112 training loss: 445.0931871086359.          Total Reward: -66.0
+Episode 113 training loss: 552.8596864938736.          Total Reward: -58.0
+Episode 114 training loss: 558.7080541700125.          Total Reward: -61.0
+Episode 115 training loss: 348.5133226811886.          Total Reward: -72.0
+Episode 116 training loss: 506.2550823688507.          Total Reward: -60.0
+Episode 117 training loss: 487.0215083658695.          Total Reward: -61.0
+Episode 118 training loss: 465.4307076483965.          Total Reward: -65.0
+Episode 119 training loss: 452.4816662669182.          Total Reward: -67.0
+Episode 120 training loss: 521.5854395329952.          Total Reward: -62.0
+Episode 121 training loss: 461.5577145963907.          Total Reward: -65.0
+Episode 122 training loss: 536.0837957859039.          Total Reward: -67.0
+Episode 123 training loss: 603.0330691933632.          Total Reward: -68.0
+Episode 124 training loss: 646.4844146072865.          Total Reward: -61.0
+Episode 125 training loss: 500.18676203489304.          Total Reward: -66.0
+Episode 126 training loss: 481.078804731369.          Total Reward: -66.0
+Episode 127 training loss: 516.1661993861198.          Total Reward: -65.0
+Episode 128 training loss: 485.78892916440964.          Total Reward: -62.0
+Episode 129 training loss: 480.75324496626854.          Total Reward: -67.0
+Episode 130 training loss: 456.0759409070015.          Total Reward: -73.0
+Episode 131 training loss: 602.8178422749043.          Total Reward: -65.0
+Episode 132 training loss: 456.7429326027632.          Total Reward: -66.0
+Episode 133 training loss: 622.1108383536339.          Total Reward: -53.0
+Episode 134 training loss: 465.00623458623886.          Total Reward: -68.0
+Episode 135 training loss: 555.8554614782333.          Total Reward: -63.0
+Episode 136 training loss: 722.2646544277668.          Total Reward: -67.0
+Episode 137 training loss: 580.7977049350739.          Total Reward: -61.0
+Episode 138 training loss: 653.8097138404846.          Total Reward: -54.0
+Episode 139 training loss: 673.1088333427906.          Total Reward: -62.0
+Episode 140 training loss: 723.1258237361908.          Total Reward: -66.0
+Episode 141 training loss: 707.4890803694725.          Total Reward: -57.0
+Episode 142 training loss: 618.4239049851894.          Total Reward: -61.0
+Episode 143 training loss: 703.2137887775898.          Total Reward: -57.0
+Episode 144 training loss: 644.8593042194843.          Total Reward: -57.0
+Episode 145 training loss: 598.0337626338005.          Total Reward: -59.0
+Episode 146 training loss: 706.0631082057953.          Total Reward: -65.0
+Episode 147 training loss: 948.5927188396454.          Total Reward: -59.0
+Episode 148 training loss: 789.1908572018147.          Total Reward: -59.0
+Episode 149 training loss: 645.7221431136131.          Total Reward: -64.0
+Episode 150 training loss: 666.711428552866.          Total Reward: -65.0
+Episode 151 training loss: 1085.319048911333.          Total Reward: -51.0
+Episode 152 training loss: 724.9788748025894.          Total Reward: -68.0
+Episode 153 training loss: 900.7157936394215.          Total Reward: -63.0
+Episode 154 training loss: 719.4218767285347.          Total Reward: -63.0
+Episode 155 training loss: 778.4743806123734.          Total Reward: -64.0
+Episode 156 training loss: 718.1212849617004.          Total Reward: -69.0
+Episode 157 training loss: 808.8678769469261.          Total Reward: -50.0
+Episode 158 training loss: 927.1014611124992.          Total Reward: -51.0
+Episode 159 training loss: 1643.091867029667.          Total Reward: -42.0
+Episode 160 training loss: 980.2410646080971.          Total Reward: -66.0
+Episode 161 training loss: 934.4256467819214.          Total Reward: -68.0
+Episode 162 training loss: 918.7210562229156.          Total Reward: -63.0
+Episode 163 training loss: 1461.43692612648.          Total Reward: -52.0
+Episode 164 training loss: 797.3138066530228.          Total Reward: -67.0
+Episode 165 training loss: 868.5687619447708.          Total Reward: -64.0
+Episode 166 training loss: 932.0578552484512.          Total Reward: -67.0
+Episode 167 training loss: 975.6794276237488.          Total Reward: -59.0
+Episode 168 training loss: 800.1537573337555.          Total Reward: -70.0
+Episode 169 training loss: 668.9121753573418.          Total Reward: -70.0
+Episode 170 training loss: 835.3228475451469.          Total Reward: -59.0
+Episode 171 training loss: 834.9766318798065.          Total Reward: -67.0
+Episode 172 training loss: 1122.3213109970093.          Total Reward: -62.0
+Episode 173 training loss: 1500.6967313885689.          Total Reward: 89.0
+Episode 174 training loss: 987.601120352745.          Total Reward: -69.0
+Episode 175 training loss: 901.5905694365501.          Total Reward: -65.0
+Episode 176 training loss: 796.1809782385826.          Total Reward: -66.0
+Episode 177 training loss: 975.7755141854286.          Total Reward: -54.0
+Episode 178 training loss: 1058.1372723579407.          Total Reward: -66.0
+Episode 179 training loss: 822.4797456264496.          Total Reward: -67.0
+Episode 180 training loss: 1061.1523553729057.          Total Reward: -61.0
+Episode 181 training loss: 717.5595409870148.          Total Reward: -72.0
+Episode 182 training loss: 796.3218458890915.          Total Reward: -71.0
+Episode 183 training loss: 821.8057572245598.          Total Reward: -64.0
+Episode 184 training loss: 945.9677124023438.          Total Reward: -60.0
+Episode 185 training loss: 789.3733269572258.          Total Reward: -64.0
+Episode 186 training loss: 1162.494222342968.          Total Reward: -48.0
+Episode 187 training loss: 1097.921002626419.          Total Reward: -59.0
+Episode 188 training loss: 1210.3162660598755.          Total Reward: -60.0
+Episode 189 training loss: 1039.1202661693096.          Total Reward: -60.0
+Episode 190 training loss: 989.3254960179329.          Total Reward: -57.0
+Episode 191 training loss: 1405.33931183815.          Total Reward: -48.0
+Episode 192 training loss: 1039.5328029990196.          Total Reward: -58.0
+Episode 193 training loss: 902.6739043593407.          Total Reward: -66.0
+Episode 194 training loss: 1453.306093454361.          Total Reward: -48.0
+Episode 195 training loss: 889.9975301027298.          Total Reward: -62.0
+Episode 196 training loss: 1184.3631541728973.          Total Reward: -50.0
+Episode 197 training loss: 871.0597769618034.          Total Reward: -63.0
+Episode 198 training loss: 993.7885162830353.          Total Reward: -59.0
+Episode 199 training loss: 857.3570165634155.          Total Reward: -68.0
+Episode 200 training loss: 781.7767349481583.          Total Reward: -68.0
+Episode 201 training loss: 1004.5549836754799.          Total Reward: -53.0
+Episode 202 training loss: 958.7206116318703.          Total Reward: -69.0
+Episode 203 training loss: 1177.6447876095772.          Total Reward: -62.0
+Episode 204 training loss: 935.9703000187874.          Total Reward: -63.0
+Episode 205 training loss: 962.0469660758972.          Total Reward: -66.0
+Episode 206 training loss: 1105.0123557448387.          Total Reward: -62.0
+Episode 207 training loss: 880.7876837849617.          Total Reward: -67.0
+Episode 208 training loss: 872.1964002847672.          Total Reward: -70.0
+Episode 209 training loss: 899.1094926595688.          Total Reward: -67.0
+Episode 210 training loss: 963.5303404927254.          Total Reward: -69.0
+Episode 211 training loss: 813.6124274134636.          Total Reward: -62.0
+Episode 212 training loss: 1052.7239402532578.          Total Reward: -60.0
+Episode 213 training loss: 1104.142078757286.          Total Reward: -59.0
+Episode 214 training loss: 1415.2351256012917.          Total Reward: -58.0
+Episode 215 training loss: 1184.5849146842957.          Total Reward: -41.0
+Episode 216 training loss: 1096.114198744297.          Total Reward: -65.0
+Episode 217 training loss: 1005.7458010911942.          Total Reward: -63.0
+Episode 218 training loss: 994.78284907341.          Total Reward: -63.0
+Episode 219 training loss: 1242.4985095262527.          Total Reward: -53.0
+Episode 220 training loss: 1496.7517905831337.          Total Reward: -41.0
+Episode 221 training loss: 1285.2825411558151.          Total Reward: -55.0
+Episode 222 training loss: 1273.6408730745316.          Total Reward: -56.0
+Episode 223 training loss: 1224.96101552248.          Total Reward: -53.0
+Episode 224 training loss: 1068.3591423034668.          Total Reward: -65.0
+Episode 225 training loss: 1003.3090598583221.          Total Reward: -66.0
+Episode 226 training loss: 1136.7420480847359.          Total Reward: -59.0
+Episode 227 training loss: 1199.3946822285652.          Total Reward: -63.0
+Episode 228 training loss: 1410.8442642688751.          Total Reward: -49.0
+Episode 229 training loss: 1537.3991245031357.          Total Reward: -48.0
+Episode 230 training loss: 1466.3413088917732.          Total Reward: -45.0
+Episode 231 training loss: 1408.2704538702965.          Total Reward: -48.0
+Episode 232 training loss: 1221.5410137176514.          Total Reward: -64.0
+Episode 233 training loss: 1091.273622751236.          Total Reward: -64.0
+Episode 234 training loss: 1269.8887591362.          Total Reward: -64.0
+Episode 235 training loss: 1479.5542863607407.          Total Reward: -63.0
+Episode 236 training loss: 1360.4491201639175.          Total Reward: -62.0
+Episode 237 training loss: 1089.122988164425.          Total Reward: -61.0
+Episode 238 training loss: 1263.0437551736832.          Total Reward: -67.0
+Episode 239 training loss: 1357.7441796064377.          Total Reward: -56.0
+Episode 240 training loss: 2136.702388882637.          Total Reward: -55.0
+Episode 241 training loss: 2196.148304104805.          Total Reward: -49.0
+Episode 242 training loss: 1477.770222067833.          Total Reward: -59.0
+Episode 243 training loss: 1266.8577554225922.          Total Reward: -64.0
+Episode 244 training loss: 1438.0247640609741.          Total Reward: -65.0
+Episode 245 training loss: 1997.602249264717.          Total Reward: -52.0
+Episode 246 training loss: 1145.6767287254333.          Total Reward: -68.0
+Episode 247 training loss: 1428.2395825386047.          Total Reward: -62.0
+Episode 248 training loss: 1402.9098768234253.          Total Reward: -62.0
+Episode 249 training loss: 1398.3907825946808.          Total Reward: -64.0
+Episode 250 training loss: 1624.145896077156.          Total Reward: -65.0
+Episode 251 training loss: 1623.581683754921.          Total Reward: -61.0
+Episode 252 training loss: 1553.8863110542297.          Total Reward: -56.0
+Episode 253 training loss: 1658.314460992813.          Total Reward: -61.0
+Episode 254 training loss: 1882.826024055481.          Total Reward: -49.0
+Episode 255 training loss: 1761.3499386310577.          Total Reward: -65.0
+Episode 256 training loss: 1672.0642191171646.          Total Reward: -60.0
+Episode 257 training loss: 1269.24072098732.          Total Reward: -68.0
+Episode 258 training loss: 1526.8627071380615.          Total Reward: -66.0
+Episode 259 training loss: 1263.22822368145.          Total Reward: -67.0
+Episode 260 training loss: 1989.311576962471.          Total Reward: -61.0
+Episode 261 training loss: 1334.0924291610718.          Total Reward: -62.0
+Episode 262 training loss: 2468.4919177293777.          Total Reward: -57.0
+Episode 263 training loss: 1672.6250935792923.          Total Reward: -67.0
+Episode 264 training loss: 2147.3919348716736.          Total Reward: -58.0
+Episode 265 training loss: 2152.757939875126.          Total Reward: 3.0
+Episode 266 training loss: 1932.105529308319.          Total Reward: -55.0
+Episode 267 training loss: 1699.0688292980194.          Total Reward: -59.0
+Episode 268 training loss: 1600.9696490764618.          Total Reward: -59.0
+Episode 269 training loss: 1737.7169548273087.          Total Reward: -62.0
+Episode 270 training loss: 1840.578605055809.          Total Reward: -60.0
+Episode 271 training loss: 2484.595958828926.          Total Reward: -55.0
+Episode 272 training loss: 1706.3713814020157.          Total Reward: -62.0
+Episode 273 training loss: 1786.343711256981.          Total Reward: -50.0
+Episode 274 training loss: 1878.0848144292831.          Total Reward: -58.0
+Episode 275 training loss: 1770.9329035282135.          Total Reward: -60.0
+Episode 276 training loss: 1750.4731236696243.          Total Reward: -59.0
+Episode 277 training loss: 2070.035977602005.          Total Reward: -62.0
+Episode 278 training loss: 1942.5954563617706.          Total Reward: -64.0
+Episode 279 training loss: 2569.863367676735.          Total Reward: -39.0
+Episode 280 training loss: 2588.3808811903.          Total Reward: -65.0
+Episode 281 training loss: 1552.67127597332.          Total Reward: -67.0
+Episode 282 training loss: 2300.888882994652.          Total Reward: -58.0
+Episode 283 training loss: 2284.816928267479.          Total Reward: -53.0
+Episode 284 training loss: 1848.7978718280792.          Total Reward: -63.0
+Episode 285 training loss: 2095.570323944092.          Total Reward: -60.0
+Episode 286 training loss: 1816.0453221797943.          Total Reward: -58.0
+Episode 287 training loss: 1929.1694521903992.          Total Reward: -55.0
+Episode 288 training loss: 1869.6455609798431.          Total Reward: -55.0
+Episode 289 training loss: 2778.7943482398987.          Total Reward: -63.0
+Episode 290 training loss: 2689.6725939512253.          Total Reward: -47.0
+Episode 291 training loss: 2013.2603754997253.          Total Reward: -61.0
+Episode 292 training loss: 2701.1141560077667.          Total Reward: -45.0
+Episode 293 training loss: 2428.8863224983215.          Total Reward: -64.0
+Episode 294 training loss: 2485.879346370697.          Total Reward: -49.0
+Episode 295 training loss: 2472.839256167412.          Total Reward: -46.0
+Episode 296 training loss: 2011.922468662262.          Total Reward: -67.0
+Episode 297 training loss: 1827.517855167389.          Total Reward: -72.0
+Episode 298 training loss: 2176.861610889435.          Total Reward: -65.0
+Episode 299 training loss: 2378.124363422394.          Total Reward: -58.0
+Episode 300 training loss: 2225.150603413582.          Total Reward: -69.0
+Episode 301 training loss: 1795.2938871383667.          Total Reward: -72.0
+Episode 302 training loss: 2392.789798974991.          Total Reward: -57.0
+Episode 303 training loss: 2293.687611103058.          Total Reward: -61.0
+Episode 304 training loss: 2529.5796432495117.          Total Reward: -58.0
+Episode 305 training loss: 2173.059834957123.          Total Reward: -65.0
+Episode 306 training loss: 2050.874567747116.          Total Reward: -65.0
+Episode 307 training loss: 2769.789582014084.          Total Reward: -62.0
+Episode 308 training loss: 2035.5501177310944.          Total Reward: -68.0
+Episode 309 training loss: 2575.782883167267.          Total Reward: -51.0
+Episode 310 training loss: 2383.7805438041687.          Total Reward: -70.0
+Episode 311 training loss: 2471.3865394592285.          Total Reward: -62.0
+Episode 312 training loss: 2177.881914615631.          Total Reward: -65.0
+Episode 313 training loss: 2479.2724994421005.          Total Reward: -60.0
+Episode 314 training loss: 2191.2381448745728.          Total Reward: -61.0
+Episode 315 training loss: 1886.0973992347717.          Total Reward: -68.0
+Episode 316 training loss: 2731.0135712623596.          Total Reward: -54.0
+Episode 317 training loss: 1899.0272691249847.          Total Reward: -72.0
+Episode 318 training loss: 2666.4864590168.          Total Reward: -55.0
+Episode 319 training loss: 2588.468435525894.          Total Reward: -63.0
+Episode 320 training loss: 2351.0408816337585.          Total Reward: -64.0
+Episode 321 training loss: 3209.99489068985.          Total Reward: -51.0
+Episode 322 training loss: 2221.4109926223755.          Total Reward: -63.0
+Episode 323 training loss: 2425.9678144454956.          Total Reward: -59.0
+Episode 324 training loss: 2708.287253856659.          Total Reward: -66.0
+Episode 325 training loss: 2470.507182598114.          Total Reward: -68.0
+Episode 326 training loss: 2069.5219321250916.          Total Reward: -72.0
+Episode 327 training loss: 2782.216152191162.          Total Reward: -58.0
+Episode 328 training loss: 2415.21839761734.          Total Reward: -59.0
+Episode 329 training loss: 3247.6667306423187.          Total Reward: -62.0
+Episode 330 training loss: 2395.9564821720123.          Total Reward: -63.0
+Episode 331 training loss: 2636.779569387436.          Total Reward: -63.0
+Episode 332 training loss: 2301.26744222641.          Total Reward: -68.0
+Episode 333 training loss: 2967.026046514511.          Total Reward: -50.0
+Episode 334 training loss: 2725.8587441444397.          Total Reward: -55.0
+Episode 335 training loss: 2964.910570859909.          Total Reward: -63.0
+Episode 336 training loss: 3285.2804605960846.          Total Reward: -58.0
+Episode 337 training loss: 2982.5322568416595.          Total Reward: -57.0
+Episode 338 training loss: 2259.6058552265167.          Total Reward: -70.0
+Episode 339 training loss: 3202.3526573181152.          Total Reward: -54.0
+Episode 340 training loss: 2517.3676517009735.          Total Reward: -65.0
+Episode 341 training loss: 4204.120882987976.          Total Reward: -43.0
+Episode 342 training loss: 4047.807222366333.          Total Reward: -44.0
+Episode 343 training loss: 3488.504324913025.          Total Reward: -51.0
+Episode 344 training loss: 3008.938866376877.          Total Reward: -61.0
+Episode 345 training loss: 3311.8446278572083.          Total Reward: -57.0
+Episode 346 training loss: 2636.383109331131.          Total Reward: -63.0
+Episode 347 training loss: 2495.0913603305817.          Total Reward: -62.0
+Episode 348 training loss: 3097.0934710502625.          Total Reward: -62.0
+Episode 349 training loss: 3025.3976907730103.          Total Reward: -55.0
+Episode 350 training loss: 3078.4029870033264.          Total Reward: -54.0
+Episode 351 training loss: 3658.5715568065643.          Total Reward: -40.0
+Episode 352 training loss: 2985.2234568595886.          Total Reward: -58.0
+Episode 353 training loss: 3255.5845987796783.          Total Reward: -52.0
+Episode 354 training loss: 3064.134073495865.          Total Reward: -61.0
+Episode 355 training loss: 3293.4168734550476.          Total Reward: -55.0
+Episode 356 training loss: 2389.137424468994.          Total Reward: -65.0
+Episode 357 training loss: 3182.9704525470734.          Total Reward: -63.0
+Episode 358 training loss: 3081.393547773361.          Total Reward: -64.0
+Episode 359 training loss: 2979.906531572342.          Total Reward: -63.0
+Episode 360 training loss: 3364.216110229492.          Total Reward: -56.0
+Episode 361 training loss: 2496.7951617240906.          Total Reward: -67.0
+Episode 362 training loss: 4892.851753950119.          Total Reward: -54.0
+Episode 363 training loss: 3819.8017852306366.          Total Reward: -40.0
+Episode 364 training loss: 3167.654956102371.          Total Reward: -62.0
+Episode 365 training loss: 3338.358615398407.          Total Reward: -57.0
+Episode 366 training loss: 3790.4281628131866.          Total Reward: -61.0
+Episode 367 training loss: 3897.3383553028107.          Total Reward: -52.0
+Episode 368 training loss: 4101.264314651489.          Total Reward: -56.0
+Episode 369 training loss: 3464.383620738983.          Total Reward: -61.0
+Episode 370 training loss: 4807.264048337936.          Total Reward: -48.0
+Episode 371 training loss: 4066.499355316162.          Total Reward: -47.0
+Episode 372 training loss: 3332.013063430786.          Total Reward: -69.0
+Episode 373 training loss: 4163.6689195632935.          Total Reward: -51.0
+Episode 374 training loss: 3709.8889439105988.          Total Reward: -66.0
+Episode 375 training loss: 4446.605615139008.          Total Reward: -49.0
+Episode 376 training loss: 4825.327930688858.          Total Reward: -49.0
+Episode 377 training loss: 6174.04168343544.          Total Reward: -15.0
+Episode 378 training loss: 3186.7401509284973.          Total Reward: -66.0
+Episode 379 training loss: 4965.896406173706.          Total Reward: -54.0
+Episode 380 training loss: 4685.193014621735.          Total Reward: -53.0
+Episode 381 training loss: 4937.544127464294.          Total Reward: -47.0
+Episode 382 training loss: 3939.777267217636.          Total Reward: -59.0
+Episode 383 training loss: 4163.118602514267.          Total Reward: -55.0
+Episode 384 training loss: 3706.1098461151123.          Total Reward: -63.0
+Episode 385 training loss: 4099.316863536835.          Total Reward: -59.0
+Episode 386 training loss: 3146.1214747428894.          Total Reward: -65.0
+Episode 387 training loss: 4318.990818977356.          Total Reward: -53.0
+Episode 388 training loss: 3185.006479740143.          Total Reward: -67.0
+Episode 389 training loss: 3006.7687883377075.          Total Reward: -65.0
+Episode 390 training loss: 4507.048083782196.          Total Reward: -52.0
+Episode 391 training loss: 7099.372157335281.          Total Reward: -50.0
+Episode 392 training loss: 3713.1850237846375.          Total Reward: -61.0
+Episode 393 training loss: 4485.313175201416.          Total Reward: -56.0
+Episode 394 training loss: 6306.45741891861.          Total Reward: -51.0
+Episode 395 training loss: 4033.6568717956543.          Total Reward: -57.0
+Episode 396 training loss: 4541.32763338089.          Total Reward: -52.0
+Episode 397 training loss: 5144.417170524597.          Total Reward: -53.0
+Episode 398 training loss: 3563.043032646179.          Total Reward: -63.0
+Episode 399 training loss: 3916.5607075691223.          Total Reward: -63.0
+Episode 400 training loss: 5163.7794415950775.          Total Reward: -51.0
+Episode 401 training loss: 3785.7261695861816.          Total Reward: -56.0
+Episode 402 training loss: 4138.638730287552.          Total Reward: -53.0
+Episode 403 training loss: 3023.2606616020203.          Total Reward: -70.0
+Episode 404 training loss: 4316.4949769973755.          Total Reward: -52.0
+Episode 405 training loss: 3668.5307450294495.          Total Reward: -60.0
+Episode 406 training loss: 4788.9876589775085.          Total Reward: -61.0
+Episode 407 training loss: 5638.307394742966.          Total Reward: -55.0
+Episode 408 training loss: 6611.8251953125.          Total Reward: -55.0
+Episode 409 training loss: 4548.9113874435425.          Total Reward: -53.0
+Episode 410 training loss: 3627.32834815979.          Total Reward: -59.0
+Episode 411 training loss: 4306.68933391571.          Total Reward: -53.0
+Episode 412 training loss: 4225.504282236099.          Total Reward: -56.0
+Episode 413 training loss: 4471.540823936462.          Total Reward: -56.0
+Episode 414 training loss: 3425.921486854553.          Total Reward: -67.0
+Episode 415 training loss: 3758.90314078331.          Total Reward: -64.0
+Episode 416 training loss: 4366.927127599716.          Total Reward: -59.0
+Episode 417 training loss: 4712.648290395737.          Total Reward: -52.0
+Episode 418 training loss: 4050.5502710342407.          Total Reward: -56.0
+Episode 419 training loss: 4239.527933597565.          Total Reward: -54.0
+Episode 420 training loss: 3235.5369799137115.          Total Reward: -69.0
+Episode 421 training loss: 3803.887519836426.          Total Reward: -66.0
+Episode 422 training loss: 5049.036650657654.          Total Reward: -43.0
+Episode 423 training loss: 4026.8268036842346.          Total Reward: -61.0
+Episode 424 training loss: 3713.2900977134705.          Total Reward: -60.0
+Episode 425 training loss: 3888.273060798645.          Total Reward: -63.0
+Episode 426 training loss: 3483.6650292873383.          Total Reward: -67.0
+Episode 427 training loss: 3806.3602192401886.          Total Reward: -65.0
+Episode 428 training loss: 5011.498990058899.          Total Reward: -42.0
+Episode 429 training loss: 3967.4143781661987.          Total Reward: -62.0
+Episode 430 training loss: 3786.9502789974213.          Total Reward: -57.0
+Episode 431 training loss: 3982.953207731247.          Total Reward: -63.0
+Episode 432 training loss: 3761.704375267029.          Total Reward: -58.0
+Episode 433 training loss: 4529.532137393951.          Total Reward: -51.0
+Episode 434 training loss: 4186.612618923187.          Total Reward: -64.0
+Episode 435 training loss: 4600.763486862183.          Total Reward: -55.0
+Episode 436 training loss: 4238.558383464813.          Total Reward: -64.0
+Episode 437 training loss: 4892.9719779491425.          Total Reward: -54.0
+Episode 438 training loss: 3537.7730231285095.          Total Reward: -59.0
+Episode 439 training loss: 5655.866681098938.          Total Reward: -37.0
+Episode 440 training loss: 4554.255696296692.          Total Reward: -62.0
+Episode 441 training loss: 3546.3243277072906.          Total Reward: -57.0
+Episode 442 training loss: 4155.741818904877.          Total Reward: -54.0
+Episode 443 training loss: 4173.774196147919.          Total Reward: -56.0
+Episode 444 training loss: 3858.9232969284058.          Total Reward: -66.0
+Episode 445 training loss: 4363.837997913361.          Total Reward: -54.0
+Episode 446 training loss: 3548.2718048095703.          Total Reward: -68.0
+Episode 447 training loss: 4309.10045671463.          Total Reward: -58.0
+Episode 448 training loss: 4119.279152870178.          Total Reward: -57.0
+Episode 449 training loss: 3357.786618709564.          Total Reward: -69.0
+Episode 450 training loss: 4661.790299415588.          Total Reward: -55.0
+Episode 451 training loss: 3938.124903202057.          Total Reward: -62.0
+Episode 452 training loss: 5758.4378209114075.          Total Reward: -56.0
+Episode 453 training loss: 4286.375974655151.          Total Reward: -57.0
+Episode 454 training loss: 4480.87418794632.          Total Reward: -51.0
+Episode 455 training loss: 3715.1102628707886.          Total Reward: -67.0
+Episode 456 training loss: 3285.258713245392.          Total Reward: -69.0
+Episode 457 training loss: 5303.978332042694.          Total Reward: -54.0
+Episode 458 training loss: 5365.963818073273.          Total Reward: -45.0
+Episode 459 training loss: 5433.933918952942.          Total Reward: -55.0
+Episode 460 training loss: 5262.875258922577.          Total Reward: -47.0
+Episode 461 training loss: 5538.54997253418.          Total Reward: -46.0
+Episode 462 training loss: 5635.225155353546.          Total Reward: -53.0
+Episode 463 training loss: 4054.295091152191.          Total Reward: -68.0
+Episode 464 training loss: 5142.4140248298645.          Total Reward: -49.0
+Episode 465 training loss: 4704.158493041992.          Total Reward: -60.0
+Episode 466 training loss: 4817.955682754517.          Total Reward: -62.0
+Episode 467 training loss: 5546.416599273682.          Total Reward: -47.0
+Episode 468 training loss: 4107.4818110466.          Total Reward: -65.0
+Episode 469 training loss: 4913.78614616394.          Total Reward: -57.0
+Episode 470 training loss: 4689.956524848938.          Total Reward: -65.0
+Episode 471 training loss: 5180.118270397186.          Total Reward: -60.0
+Episode 472 training loss: 7224.122666358948.          Total Reward: -50.0
+Episode 473 training loss: 5660.7991671562195.          Total Reward: -50.0
+Episode 474 training loss: 4542.607101678848.          Total Reward: -60.0
+Episode 475 training loss: 4416.627099514008.          Total Reward: -57.0
+Episode 476 training loss: 5535.429217338562.          Total Reward: -53.0
+Episode 477 training loss: 5419.194071292877.          Total Reward: -55.0
+Episode 478 training loss: 4666.784065246582.          Total Reward: -62.0
+Episode 479 training loss: 4626.332441806793.          Total Reward: -57.0
+Episode 480 training loss: 5198.184118270874.          Total Reward: -53.0
+Episode 481 training loss: 3685.9346108436584.          Total Reward: -69.0
+Episode 482 training loss: 5630.214990615845.          Total Reward: -52.0
+Episode 483 training loss: 4434.504266262054.          Total Reward: -57.0
+Episode 484 training loss: 4528.453266143799.          Total Reward: -60.0
+Episode 485 training loss: 4261.208880901337.          Total Reward: -61.0
+Episode 486 training loss: 5789.980868339539.          Total Reward: -45.0
+Episode 487 training loss: 4735.96822309494.          Total Reward: -56.0
+Episode 488 training loss: 4310.856773376465.          Total Reward: -55.0
+Episode 489 training loss: 4350.930614948273.          Total Reward: -61.0
+Episode 490 training loss: 4219.213685512543.          Total Reward: -68.0
+Episode 491 training loss: 5988.362166404724.          Total Reward: -46.0
+Episode 492 training loss: 4975.705317020416.          Total Reward: -51.0
+Episode 493 training loss: 4729.54935836792.          Total Reward: -59.0
+Episode 494 training loss: 5466.0628299713135.          Total Reward: -62.0
+Episode 495 training loss: 5213.190212011337.          Total Reward: -48.0
+Episode 496 training loss: 3916.620933532715.          Total Reward: -60.0
+Episode 497 training loss: 4469.965395450592.          Total Reward: -64.0
+Episode 498 training loss: 3913.542193889618.          Total Reward: -64.0
+Episode 499 training loss: 3739.7118062973022.          Total Reward: -63.0
 Complete
