@@ -5,6 +5,7 @@
 <li>Run: conda install pytorch==2.5.0 torchvision==0.20.0 torchaudio==2.5.0 pytorch-cuda=12.4 -c pytorch -c nvidia</li>
 <li>Run: pip install gymnasium</li>
 <li>Run: pip install ale-py</li> 
+<li>Run: pip install matplotlib</li>
 <li>Run: git clone https://github.com/allenyxu2004/CS4100_Pac_Man.git</li>
 <li>cd into project directory, and run: python pacman_dqn_implementation.py</li>
 </ul>

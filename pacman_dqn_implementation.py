@@ -1,4 +1,5 @@
 from itertools import count
+import matplotlib.pyplot as plt
 import gymnasium as gym
 import ale_py
 import random 
@@ -58,7 +59,7 @@ EPS_END = 0.05
 EPS_DECAY = 300000    
 TAU = 0.005
 LR = 1e-4
-num_episodes = 100  
+num_episodes = 2  
 # Get number of actions from gym action space
 n_actions = env.action_space.n
 # Get the number of state observations
@@ -146,6 +147,7 @@ for i_episode in range(num_episodes):
     state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0) / 255.0
     state = state.unsqueeze(1)
     total_reward = 0
+    total_rewards = []
     #Changing the game to only 1 life
     info['lives'] = 1
     previous_action = select_action(state)
@@ -210,7 +212,13 @@ for i_episode in range(num_episodes):
             break
         num_lives = info['lives']
     print(f"Episode {i_episode} training loss: {running_loss}.          Total Reward: {total_reward}")
+    total_rewards.append(total_reward)
 
 torch.save(target_net.state_dict(), 'target_net.pth') 
 torch.save(policy_net.state_dict(), 'policy_net.pth')  
+plt.plot(rewards)
+plt.xlabel('Episode')
+plt.ylabel('Total Reward')
+plt.savefig('Rewards_Plot.png', dpi=300, bbox_inches='tight')
+
 print('Complete')
