@@ -9,6 +9,7 @@ from collections import namedtuple, deque
 import math 
 from torch import max
 import cv2
+import torchvision.transforms.v2 as transforms 
 
 # Referenced: https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html
 
@@ -54,10 +55,10 @@ BATCH_SIZE = 128
 GAMMA = 0.99
 EPS_START = 1
 EPS_END = 0.05
-EPS_DECAY = 300000      
+EPS_DECAY = 300000    
 TAU = 0.005
-LR = 1e-5
-num_episodes = 500  
+LR = 1e-4
+num_episodes = 100  
 # Get number of actions from gym action space
 n_actions = env.action_space.n
 # Get the number of state observations
@@ -68,7 +69,6 @@ target_net.load_state_dict(policy_net.state_dict())
 
 optimizer = torch.optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
 memory = ReplayMemory(10000)
-
 steps_done = 0
 
 
@@ -143,23 +143,49 @@ for i_episode in range(num_episodes):
     state, info = env.reset()
     #Crop out the score, and blank space at the top of the game 
     state = state[20:200, 0:]
-    state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0)
+    state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0) / 255.0
     state = state.unsqueeze(1)
+    total_reward = 0
+    #Changing the game to only 1 life
+    info['lives'] = 1
+    previous_action = select_action(state)
+    wait_until_frame = 0
     for t in count():
-        action = select_action(state)
-        observation, reward, terminated, truncated, _ = env.step(action.item())
+        current_frame = info['episode_frame_number']
+        # Ignore the first 140 frames, since the game hasn't started yet 
+        # Also, only choose an action every 4th frame
+        #If Pacman previously died, wait 128 frames after they lost a life 
+        if current_frame < 160 or current_frame % 4 != 0 or current_frame < wait_until_frame:
+            action = previous_action 
+        else:
+            action = select_action(state)
+        observation, reward, terminated, truncated, info = env.step(action.item())
 
         #Crop out the score, and blank space at the top of the game 
         observation = observation[20:200, 0:]
-
-        reward = torch.tensor([reward], device=device)
+        
+        # # Manually change the reward to -20 if pacman lost a life
+        # if info['lives'] < num_lives:
+        #     reward = -10
+        #     # Set the frame to wait until to 128 greater than now, since this is roughly how long it takes for pacman to respawn 
+        #     wait_until_frame = current_frame + 128 
         done = terminated or truncated
 
         if terminated:
             next_state = None
+            # Set the reward to -50 if pacman loses
+            if info['lives'] == 0:
+                reward = -100 
+            else:
+                # If pacman wins, give a huge reward
+                reward = 1000
         else:
-            next_state = torch.tensor(observation, dtype=torch.float32, device=device).unsqueeze(0)
+            next_state = torch.tensor(observation, dtype=torch.float32, device=device).unsqueeze(0) / 255.0
             next_state = next_state.unsqueeze(0)
+        
+        total_reward += reward
+        reward = torch.tensor([reward], device=device)
+
 
         # Store the transition in memory
         memory.push(state, action, next_state, reward)
@@ -182,7 +208,8 @@ for i_episode in range(num_episodes):
         if done:
             episode_durations.append(t + 1)
             break
-    print(f"Episode {i_episode} training loss: {running_loss}")
+        num_lives = info['lives']
+    print(f"Episode {i_episode} training loss: {running_loss}.          Total Reward: {total_reward}")
 
 torch.save(target_net.state_dict(), 'target_net.pth') 
 torch.save(policy_net.state_dict(), 'policy_net.pth')  
