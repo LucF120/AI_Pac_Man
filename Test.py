@@ -17,10 +17,14 @@ device = torch.device(
 gym.register_envs(ale_py)
 
 env = gym.make("ALE/Pacman-v5", render_mode="human", obs_type="grayscale")
-
+print(env.spec)
+print(env.metadata)
+print(env.action_space)
+print(env.observation_space)
 n_actions = env.action_space.n
 policy_net = DQN(n_actions).to(device)
 
+# This always loads from the previous_run/ folder. Make sure the policy_net.pth file is located here. 
 load_execution(policy_net)
 
 def select_action(state):
@@ -35,19 +39,16 @@ for i in range(10000):
     state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0) / 255.0
     state = state.unsqueeze(1)
     previous_reward = 0
+    print(info)
     for t in count():
         action = select_action(state)
         observation, reward, terminated, truncated, info = env.step(action.item())
         if reward != previous_reward and reward != 0:
             print(f"Step {t} Reward: {reward}")
+
         #Crop out the score, and blank space at the top of the game 
         observation = observation[20:200, 0:]
-        
-        # # Manually change the reward to -20 if pacman lost a life
-        # if info['lives'] < num_lives:
-        #     reward = -10
-        #     # Set the frame to wait until to 128 greater than now, since this is roughly how long it takes for pacman to respawn 
-        #     wait_until_frame = current_frame + 128 
+
         done = terminated or truncated
 
         if terminated:
