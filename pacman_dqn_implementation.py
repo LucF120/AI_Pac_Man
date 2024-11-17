@@ -98,9 +98,6 @@ def select_action(state):
     else:
         return torch.tensor([[env.action_space.sample()]], device=device, dtype=torch.long)
 
-
-episode_durations = []
-
 def optimize_model():
     if len(memory) < BATCH_SIZE:
         return 0
@@ -223,7 +220,6 @@ for i_episode in range(num_episodes):
         target_net.load_state_dict(target_net_state_dict)
 
         if done:
-            episode_durations.append(t + 1)
             break
         num_lives = info['lives']
     print(f"Episode {i_episode} training loss: {running_loss}.          Total Reward: {total_reward}")
