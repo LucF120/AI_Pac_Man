@@ -61,7 +61,7 @@ TAU = 0.005
 LR = 1e-5
 
 
-num_episodes = 5000
+num_episodes = 1000
 # This decides how many episodes until running save_execution() 
 save_rate = 100
 
@@ -81,7 +81,7 @@ steps_done = 0
 
 #Uncomment this to load from a previous execution 
 # Note: The num_episodes must be set above. 
-# BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done = load_execution(target_net, policy_net, memory)
+# BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done = load_execution(policy_net, target_net, memory)
 
 def select_action(state):
     global steps_done
@@ -160,8 +160,6 @@ for i_episode in range(num_episodes):
     state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0) / 255.0
     state = state.unsqueeze(1)
     total_reward = 0
-    #Changing the game to only 1 life
-    info['lives'] = 1
     previous_action = select_action(state)
     wait_until_frame = 0
     for t in count():
@@ -173,26 +171,27 @@ for i_episode in range(num_episodes):
             action = previous_action 
         else:
             action = select_action(state)
+            wait_until_frame = 0
         observation, reward, terminated, truncated, info = env.step(action.item())
 
         #Crop out the score, and blank space at the top of the game 
         observation = observation[20:200, 0:]
         
-        # # Manually change the reward to -20 if pacman lost a life
-        # if info['lives'] < num_lives:
-        #     reward = -10
-        #     # Set the frame to wait until to 128 greater than now, since this is roughly how long it takes for pacman to respawn 
-        #     wait_until_frame = current_frame + 128 
+        # # Manually change the reward to -100 if pacman lost a life
+        if info['lives'] < num_lives:
+            reward = -100
+            # Set the frame to wait until to 128 greater than now, since this is roughly how long it takes for pacman to respawn 
+            wait_until_frame = current_frame + 128 
         done = terminated or truncated
 
         if terminated:
             next_state = None
             # Set the reward to -100 if pacman loses
             if info['lives'] == 0:
-                reward = -100 
+                reward = -1000
             else:
                 # If pacman wins, give a huge reward
-                reward = 1000
+                reward = 100000
         else:
             next_state = torch.tensor(observation, dtype=torch.float32, device=device).unsqueeze(0) / 255.0
             next_state = next_state.unsqueeze(0)
