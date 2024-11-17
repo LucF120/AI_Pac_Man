@@ -162,6 +162,7 @@ for i_episode in range(num_episodes):
     total_reward = 0
     previous_action = select_action(state)
     wait_until_frame = 0
+    num_lives = info['lives']
     for t in count():
         current_frame = info['episode_frame_number']
         # Ignore the first 140 frames, since the game hasn't started yet 
