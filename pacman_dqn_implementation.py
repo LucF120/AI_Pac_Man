@@ -59,7 +59,7 @@ EPS_END = 0.05
 EPS_DECAY = 300000    
 TAU = 0.005
 LR = 1e-4
-num_episodes = 2  
+num_episodes = 100
 # Get number of actions from gym action space
 n_actions = env.action_space.n
 # Get the number of state observations
@@ -220,7 +220,7 @@ torch.save(target_net.state_dict(), 'target_net.pth')
 torch.save(policy_net.state_dict(), 'policy_net.pth')  
 
 plt.figure()
-plt.plot(range(0, num_episodes), total_rewards, label="Training Loss vs Episode #")
+plt.plot(range(0, num_episodes), total_rewards, label="Total Reward vs Episode #")
 plt.xlabel('Episode')
 plt.ylabel('Total Reward')
 plt.legend()
