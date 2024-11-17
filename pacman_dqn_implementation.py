@@ -59,7 +59,12 @@ EPS_END = 0.01
 EPS_DECAY = 40000    
 TAU = 0.005
 LR = 1e-5
-num_episodes = 2
+
+
+num_episodes = 5000
+# This decides how many episodes until running save_execution() 
+save_rate = 100
+
 # Get number of actions from gym action space
 n_actions = env.action_space.n
 # Get the number of state observations
@@ -146,6 +151,10 @@ def optimize_model():
 
 total_rewards = []
 for i_episode in range(num_episodes):
+    # Save the execution every save_rate # of episodes 
+    if(i_episode != 0 and i_episode % save_rate == 0):
+        save_execution(target_net.state_dict(), policy_net.state_dict(), memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards)
+    
     running_loss = 0.0
     # Initialize the environment and get its state
     state, info = env.reset()
@@ -220,5 +229,6 @@ for i_episode in range(num_episodes):
     print(f"Episode {i_episode} training loss: {running_loss}.          Total Reward: {total_reward}")
     total_rewards.append(total_reward)
 
+# One final save before terminating 
 save_execution(target_net.state_dict(), policy_net.state_dict(), memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards)
 print('Complete')
