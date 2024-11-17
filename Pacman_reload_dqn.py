@@ -41,14 +41,17 @@ def save_execution(target_net_dict, policy_net_dict, memory, BATCH_SIZE, GAMMA, 
     print("Finished saving execution to previous_run/")
     print("-------------------------------------------------------------")
 
-def load_execution(target_net, policy_net, memory):
+def load_execution(policy_net, target_net=None, memory=None):
     print("Loading previous execution")
     # This loads the saved weights ------------------------------------------------------------------------
     policy_net.load_state_dict(torch.load('previous_run/policy_net.pth', weights_only=True))
-    target_net.load_state_dict(torch.load('previous_run/target_net.pth', weights_only=True))
+
+    if target_net:
+        target_net.load_state_dict(torch.load('previous_run/target_net.pth', weights_only=True))
     # To load the replay buffer ------------------------------------------------------------------------
-    with open("previous_run/replay_memory.pkl", "rb") as f:
-        memory.memory = pickle.load(f)
+    if memory:
+        with open("previous_run/replay_memory.pkl", "rb") as f:
+            memory.memory = pickle.load(f)
 
     # To load the old hyperparameters  ------------------------------------------------------------------------
     with open('previous_run/hyperparameters.pkl', 'rb') as f:
