@@ -11,6 +11,7 @@ import math
 from torch import max
 import cv2
 import torchvision.transforms.v2 as transforms 
+import pickle 
 
 # Referenced: https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html
 
@@ -52,14 +53,14 @@ class ReplayMemory(object):
 # EPS_DECAY controls the rate of exponential decay of epsilon, higher means a slower decay
 # TAU is the update rate of the target network
 # LR is the learning rate of the ``AdamW`` optimizer
-BATCH_SIZE = 128
+BATCH_SIZE = 64
 GAMMA = 0.99
 EPS_START = 1
-EPS_END = 0.05
-EPS_DECAY = 300000    
+EPS_END = 0.01
+EPS_DECAY = 40000    
 TAU = 0.005
-LR = 1e-4
-num_episodes = 100
+LR = 1e-5
+num_episodes = 5000
 # Get number of actions from gym action space
 n_actions = env.action_space.n
 # Get the number of state observations
@@ -68,10 +69,34 @@ policy_net = DQN(n_actions).to(device)
 target_net = DQN(n_actions).to(device)
 target_net.load_state_dict(policy_net.state_dict())
 
-optimizer = torch.optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
+# This loads the saved weights ------------------------------------------------------------------------
+# policy_net.load_state_dict(torch.load('previous_run/policy_net.pth'))
+# target_net.load_state_dict(torch.load('previous_run/target_net.pth'))
+
 memory = ReplayMemory(10000)
+
+# To load the replay buffer ------------------------------------------------------------------------
+# with open("previous_run/replay_memory.pkl", "rb") as f:
+#     memory.memory = pickle.load(f)
+
+optimizer = torch.optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
+
+
 steps_done = 0
 
+# To load the old hyperparameters  ------------------------------------------------------------------------
+# with open('previous_run/hyperparameters.pkl', 'rb') as f:
+#     loaded_hyperparameters = pickle.load(f)
+
+# BATCH_SIZE = loaded_hyperparameters['BATCH_SIZE']
+# GAMMA = loaded_hyperparameters['GAMMA']
+# EPS_START = loaded_hyperparameters['EPS_START']
+# EPS_END = loaded_hyperparameters['EPS_END']
+# EPS_DECAY = loaded_hyperparameters['EPS_DECAY']
+# TAU = loaded_hyperparameters['TAU']
+# LR = loaded_hyperparameters['LR']
+# num_episodes = loaded_hyperparameters['num_episodes']
+# steps_done = loaded_hyperparameters['steps_done']
 
 def select_action(state):
     global steps_done
@@ -176,7 +201,7 @@ for i_episode in range(num_episodes):
 
         if terminated:
             next_state = None
-            # Set the reward to -50 if pacman loses
+            # Set the reward to -100 if pacman loses
             if info['lives'] == 0:
                 reward = -100 
             else:
@@ -215,15 +240,39 @@ for i_episode in range(num_episodes):
     print(f"Episode {i_episode} training loss: {running_loss}.          Total Reward: {total_reward}")
     total_rewards.append(total_reward)
 
-print(total_rewards)
-torch.save(target_net.state_dict(), 'target_net.pth') 
-torch.save(policy_net.state_dict(), 'policy_net.pth')  
+#Save the target_net
+torch.save(target_net.state_dict(), 'previous_run/target_net.pth') 
+print("Target_net saved to target_neth.pth")
+#Save the policy net
+torch.save(policy_net.state_dict(), 'previous_run/policy_net.pth')  
+print("Policy_net saved to policy_net.pth")
+#Save the replay memory
+with open("previous_run/replay_memory.pkl", "wb") as f:
+    pickle.dump(memory.memory, f)
+print("Replay memory saved to replay_memory.pkl")
+
+hyperparameters = {
+    'BATCH_SIZE': BATCH_SIZE,
+    'GAMMA': GAMMA,
+    'EPS_START': EPS_START,
+    'EPS_END': EPS_END,
+    'EPS_DECAY': EPS_DECAY,
+    'TAU': TAU,
+    'LR': LR,
+    'num_episodes': num_episodes,
+    'steps_done': steps_done
+}
+# Save all the hyperparameters 
+with open('previous_run/hyperparameters.pkl', 'wb') as f:
+    pickle.dump(hyperparameters, f)
+print("Hyperparameters saved to hyperparameters.pkl")
 
 plt.figure()
 plt.plot(range(0, num_episodes), total_rewards, label="Total Reward vs Episode #")
 plt.xlabel('Episode')
 plt.ylabel('Total Reward')
 plt.legend()
-plt.savefig('Rewards_Plot.png', dpi=300, bbox_inches='tight')
+plt.savefig('previous_run/Rewards_Plot.png', dpi=300, bbox_inches='tight')
+print("Figure plotted to Rewards_Plot.png ")
 
 print('Complete')
