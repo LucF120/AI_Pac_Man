@@ -52,14 +52,14 @@ class ReplayMemory(object):
 # EPS_DECAY controls the rate of exponential decay of epsilon, higher means a slower decay
 # TAU is the update rate of the target network
 # LR is the learning rate of the ``AdamW`` optimizer
-BATCH_SIZE = 128
+BATCH_SIZE = 64
 GAMMA = 0.99
 EPS_START = 1
 EPS_END = 0.01
 EPS_DECAY = 40000    
 TAU = 0.005
-LR = 1e-4
-REPLAY_MEMORY_CAPACITY = 50000
+LR = 1e-5
+REPLAY_MEMORY_CAPACITY = 10000
 
 num_episodes = 1000
 # This decides how many episodes until running save_execution() 
@@ -83,7 +83,6 @@ steps_done = 0
 # Note: The num_episodes must be set above. 
 # BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, REPLAY_MEMORY_CAPACITY = load_execution(policy_net, target_net, memory)
 
-print("CAP: ", REPLAY_MEMORY_CAPACITY)
 def select_action(state):
     global steps_done
     sample = random.random()
@@ -162,20 +161,17 @@ for i_episode in range(num_episodes):
     state = state.unsqueeze(1)
     total_reward = 0
     previous_action = select_action(state)
-    wait_until_frame = 0
     num_lives = info['lives']
     for t in count():
-        run_optimization_this_step = True
+        end_episode = False
         current_frame = info['episode_frame_number']
         # Ignore the first 140 frames, since the game hasn't started yet 
         # Also, only choose an action every 4th frame
         #If Pacman previously died, wait 128 frames after they lost a life 
-        if current_frame < 160 or current_frame % 4 != 0 or current_frame < wait_until_frame:
+        if current_frame < 160 or current_frame % 4 != 0:
             action = previous_action 
-            # run_optimization_this_step = False
         else:
             action = select_action(state)
-            wait_until_frame = 0
         observation, reward, terminated, truncated, info = env.step(action.item())
 
         #Crop out the score, and blank space at the top of the game 
@@ -185,14 +181,14 @@ for i_episode in range(num_episodes):
         if info['lives'] < num_lives:
             reward = -100
             # Set the frame to wait until to 128 greater than now, since this is roughly how long it takes for pacman to respawn 
-            wait_until_frame = current_frame + 128 
+            end_episode = True
         done = terminated or truncated
 
         if terminated:
             next_state = None
             # Set the reward to -100 if pacman loses
             if info['lives'] == 0:
-                reward = -1000
+                reward = -500
             else:
                 # If pacman wins, give a huge reward
                 reward = 100000
@@ -203,23 +199,22 @@ for i_episode in range(num_episodes):
         total_reward += reward
         reward = torch.tensor([reward], device=device)
 
-        if run_optimization_this_step:
-            # Store the transition in memory
-            memory.push(state, action, next_state, reward)
+        # Store the transition in memory
+        memory.push(state, action, next_state, reward)
 
-            # Perform one step of the optimization (on the policy network)
-            
-            running_loss += optimize_model()
+        # Perform one step of the optimization (on the policy network)
+        
+        running_loss += optimize_model()
 
-            # Soft update of the target network's weights
-            # θ′ ← τ θ + (1 −τ )θ′
-            target_net_state_dict = target_net.state_dict()
-            policy_net_state_dict = policy_net.state_dict()
-            for key in policy_net_state_dict:
-                target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
-            target_net.load_state_dict(target_net_state_dict)
+        # Soft update of the target network's weights
+        # θ′ ← τ θ + (1 −τ )θ′
+        target_net_state_dict = target_net.state_dict()
+        policy_net_state_dict = policy_net.state_dict()
+        for key in policy_net_state_dict:
+            target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
+        target_net.load_state_dict(target_net_state_dict)
 
-        if done:
+        if done or end_episode:
             break
         num_lives = info['lives']
         # Move to the next state
