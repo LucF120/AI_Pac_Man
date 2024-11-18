@@ -52,16 +52,16 @@ class ReplayMemory(object):
 # EPS_DECAY controls the rate of exponential decay of epsilon, higher means a slower decay
 # TAU is the update rate of the target network
 # LR is the learning rate of the ``AdamW`` optimizer
-BATCH_SIZE = 64
+BATCH_SIZE = 128
 GAMMA = 0.99
 EPS_START = 1
 EPS_END = 0.01
 EPS_DECAY = 40000    
 TAU = 0.005
-LR = 1e-5
-REPLAY_MEMORY_CAPACITY = 100000
+LR = 1e-4
+REPLAY_MEMORY_CAPACITY = 50000
 
-num_episodes = 1
+num_episodes = 1000
 # This decides how many episodes until running save_execution() 
 save_rate = 100
 
@@ -83,7 +83,7 @@ steps_done = 0
 # Note: The num_episodes must be set above. 
 # BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, REPLAY_MEMORY_CAPACITY = load_execution(policy_net, target_net, memory)
 
-
+print("CAP: ", REPLAY_MEMORY_CAPACITY)
 def select_action(state):
     global steps_done
     sample = random.random()
@@ -172,7 +172,7 @@ for i_episode in range(num_episodes):
         #If Pacman previously died, wait 128 frames after they lost a life 
         if current_frame < 160 or current_frame % 4 != 0 or current_frame < wait_until_frame:
             action = previous_action 
-            run_optimization_this_step = False
+            # run_optimization_this_step = False
         else:
             action = select_action(state)
             wait_until_frame = 0
