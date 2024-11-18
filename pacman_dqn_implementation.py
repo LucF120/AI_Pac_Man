@@ -81,7 +81,7 @@ steps_done = 0
 
 #Uncomment this to load from a previous execution 
 # Note: The num_episodes must be set above. 
-BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, REPLAY_MEMORY_CAPACITY = load_execution(policy_net, target_net, memory)
+# BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, REPLAY_MEMORY_CAPACITY = load_execution(policy_net, target_net, memory)
 
 
 def select_action(state):
