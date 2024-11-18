@@ -164,12 +164,14 @@ for i_episode in range(num_episodes):
     wait_until_frame = 0
     num_lives = info['lives']
     for t in count():
+        run_optimization_this_step = True
         current_frame = info['episode_frame_number']
         # Ignore the first 140 frames, since the game hasn't started yet 
         # Also, only choose an action every 4th frame
         #If Pacman previously died, wait 128 frames after they lost a life 
         if current_frame < 160 or current_frame % 4 != 0 or current_frame < wait_until_frame:
             action = previous_action 
+            run_optimization_this_step = False
         else:
             action = select_action(state)
             wait_until_frame = 0
@@ -200,28 +202,27 @@ for i_episode in range(num_episodes):
         total_reward += reward
         reward = torch.tensor([reward], device=device)
 
+        if run_optimization_this_step:
+            # Store the transition in memory
+            memory.push(state, action, next_state, reward)
 
-        # Store the transition in memory
-        memory.push(state, action, next_state, reward)
+            # Perform one step of the optimization (on the policy network)
+            
+            running_loss += optimize_model()
 
-        # Move to the next state
-        state = next_state
-
-        # Perform one step of the optimization (on the policy network)
-        
-        running_loss += optimize_model()
-
-        # Soft update of the target network's weights
-        # θ′ ← τ θ + (1 −τ )θ′
-        target_net_state_dict = target_net.state_dict()
-        policy_net_state_dict = policy_net.state_dict()
-        for key in policy_net_state_dict:
-            target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
-        target_net.load_state_dict(target_net_state_dict)
+            # Soft update of the target network's weights
+            # θ′ ← τ θ + (1 −τ )θ′
+            target_net_state_dict = target_net.state_dict()
+            policy_net_state_dict = policy_net.state_dict()
+            for key in policy_net_state_dict:
+                target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
+            target_net.load_state_dict(target_net_state_dict)
 
         if done:
             break
         num_lives = info['lives']
+        # Move to the next state
+        state = next_state
     print(f"Episode {i_episode} training loss: {running_loss}.          Total Reward: {total_reward}")
     total_rewards.append(total_reward)
 
