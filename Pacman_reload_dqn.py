@@ -2,7 +2,7 @@ import pickle
 import matplotlib.pyplot as plt 
 import torch
 
-def save_execution(target_net_dict, policy_net_dict, memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards):
+def save_execution(target_net_dict, policy_net_dict, memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards, REPLAY_MEMORY_CAPACITY):
     print("Beginning to save execution")
     print("-------------------------------------------------------------")
     #Save the target_net
@@ -24,7 +24,8 @@ def save_execution(target_net_dict, policy_net_dict, memory, BATCH_SIZE, GAMMA, 
         'EPS_DECAY': EPS_DECAY,
         'TAU': TAU,
         'LR': LR,
-        'steps_done': steps_done
+        'steps_done': steps_done,
+        'REPLAY_MEMORY_CAPACITY': REPLAY_MEMORY_CAPACITY
     }
     # Save all the hyperparameters 
     with open('previous_run/hyperparameters.pkl', 'wb') as f:
@@ -48,10 +49,6 @@ def load_execution(policy_net, target_net=None, memory=None):
 
     if target_net:
         target_net.load_state_dict(torch.load('previous_run/target_net.pth', weights_only=True))
-    # To load the replay buffer ------------------------------------------------------------------------
-    if memory:
-        with open("previous_run/replay_memory.pkl", "rb") as f:
-            memory.memory = pickle.load(f)
 
     # To load the old hyperparameters  ------------------------------------------------------------------------
     with open('previous_run/hyperparameters.pkl', 'rb') as f:
@@ -65,6 +62,13 @@ def load_execution(policy_net, target_net=None, memory=None):
     TAU = loaded_hyperparameters['TAU']
     LR = loaded_hyperparameters['LR']
     steps_done = loaded_hyperparameters['steps_done']
+    REPLAY_MEMORY_CAPACITY = loaded_hyperparameters['REPLAY_MEMORY_CAPACITY']
+
+    # To load the ReplayMemory ------------------------------------------------------------------------
+    if memory:
+        memory = ReplayMemory(REPLAY_MEMORY_CAPACITY)
+        with open("previous_run/replay_memory.pkl", "rb") as f:
+            memory.memory = pickle.load(f)
 
     print("Finished loading previous execution")
-    return [BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done]
+    return [BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, REPLAY_MEMORY_CAPACITY]

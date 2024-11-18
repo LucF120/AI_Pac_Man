@@ -59,9 +59,9 @@ EPS_END = 0.01
 EPS_DECAY = 40000    
 TAU = 0.005
 LR = 1e-5
+REPLAY_MEMORY_CAPACITY = 100000
 
-
-num_episodes = 1000
+num_episodes = 1
 # This decides how many episodes until running save_execution() 
 save_rate = 100
 
@@ -73,7 +73,7 @@ policy_net = DQN(n_actions).to(device)
 target_net = DQN(n_actions).to(device)
 target_net.load_state_dict(policy_net.state_dict())
 
-memory = ReplayMemory(10000)
+memory = ReplayMemory(REPLAY_MEMORY_CAPACITY)
 
 optimizer = torch.optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
 
@@ -81,7 +81,8 @@ steps_done = 0
 
 #Uncomment this to load from a previous execution 
 # Note: The num_episodes must be set above. 
-# BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done = load_execution(policy_net, target_net, memory)
+BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, REPLAY_MEMORY_CAPACITY = load_execution(policy_net, target_net, memory)
+
 
 def select_action(state):
     global steps_done
@@ -150,7 +151,7 @@ total_rewards = []
 for i_episode in range(num_episodes):
     # Save the execution every save_rate # of episodes 
     if(i_episode != 0 and i_episode % save_rate == 0):
-        save_execution(target_net.state_dict(), policy_net.state_dict(), memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards)
+        save_execution(target_net.state_dict(), policy_net.state_dict(), memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards, REPLAY_MEMORY_CAPACITY)
     
     running_loss = 0.0
     # Initialize the environment and get its state
@@ -227,5 +228,5 @@ for i_episode in range(num_episodes):
     total_rewards.append(total_reward)
 
 # One final save before terminating 
-save_execution(target_net.state_dict(), policy_net.state_dict(), memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards)
+save_execution(target_net.state_dict(), policy_net.state_dict(), memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards, REPLAY_MEMORY_CAPACITY)
 print('Complete')

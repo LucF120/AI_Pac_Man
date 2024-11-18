@@ -39,7 +39,6 @@ for i in range(10000):
     state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0) / 255.0
     state = state.unsqueeze(1)
     previous_reward = 0
-    print(info)
     for t in count():
         action = select_action(state)
         observation, reward, terminated, truncated, info = env.step(action.item())
