@@ -13,7 +13,7 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
    - Grayscale pixel representation of the enviornment fed into neural network to train Pacman
    - Ghosts then train off of the Pacman with these specific neural network weights
 - Ghost AI
-   - Custom built enviornment for ghosts to initally train off of Pacman using reinforcement learning
+   - Custom built environment for ghosts to initally train off of Pacman using reinforcement learning
    - Player can also control Pacman to go against the ghost AI
    - Ghost AI will adapt to player controls as well
 
