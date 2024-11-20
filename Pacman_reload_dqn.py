@@ -2,6 +2,12 @@ import pickle
 import matplotlib.pyplot as plt 
 import torch
 
+device = torch.device(
+    "cuda" if torch.cuda.is_available() else
+    "mps" if torch.backends.mps.is_available() else
+    "cpu"
+)
+
 def save_execution(target_net_dict, policy_net_dict, memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards, REPLAY_MEMORY_CAPACITY):
     print("Beginning to save execution")
     print("-------------------------------------------------------------")
@@ -45,10 +51,10 @@ def save_execution(target_net_dict, policy_net_dict, memory, BATCH_SIZE, GAMMA, 
 def load_execution(policy_net, target_net=None, memory=None):
     print("Loading previous execution")
     # This loads the saved weights ------------------------------------------------------------------------
-    policy_net.load_state_dict(torch.load('previous_run/policy_net.pth', weights_only=True))
+    policy_net.load_state_dict(torch.load('previous_run/policy_net.pth', weights_only=True, map_location=device))
 
     if target_net:
-        target_net.load_state_dict(torch.load('previous_run/target_net.pth', weights_only=True))
+        target_net.load_state_dict(torch.load('previous_run/target_net.pth', weights_only=True, map_location=device))
 
     # To load the old hyperparameters  ------------------------------------------------------------------------
     with open('previous_run/hyperparameters.pkl', 'rb') as f:
