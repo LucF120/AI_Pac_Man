@@ -24,7 +24,7 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
 
 ### Getting Started
 
-##### Prerequisits
+#### Prerequisits
 - Python 3.11.5
 - numpy
 - pytorch
