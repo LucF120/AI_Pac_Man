@@ -2,7 +2,18 @@
 Allen Xu, Iba Baig, Luc Ferrara, Vishy Kamalapuram
 
 ### 1	Project Overview
-In this project, we aim to build an enhanced version of the Pac-Man game that combines reinforcement learning and neural networks to create a dynamic environment. The game will feature intelligent ghost agents that strategically target the Pac-Man player. The user will have the option to control the difficulty by adjusting the number of clever ghosts to change the complexity and unpredictability of the game. The Pac-Man agent will utilize reinforcement learning techniques to maximize its score by avoiding the ghosts and eating as much food as possible to scare them away [Reinforcement Learning in Pac-Man, 2017]. Incorporating a random maze generation will change the difficulty for the agent. We will use DFS, BFS, uniform cost, and A* search algorithms as a way for agents and ghosts to navigate throughout the maze and achieve their goals. This version of the game will allow for creative solutions combined with probabilistic inference, hopefully giving the agent and ghosts a fair chance of winning. This project will explore various AI learning techniques and game mechanisms to display real time decision making.
+In this project, we aim to build an enhanced version of the Pac-Man game that combines reinforcement learning and neural networks to create a dynamic environment. The game will feature intelligent ghost agents that strategically target the Pac-Man player by utilizing deep reinforcement learning. This version of the game will allow for creative solutions combined with probabilistic inference, hopefully giving the agent and ghosts a fair chance of winning. This project will explore various AI learning techniques and game mechanisms to display real time decision making.
+
+### Features
+- Pacman AI
+   - In order to train the ghosts, Pacman must be trained first
+   - Utilizes the Pacman ALE enviornment to train with deep RL
+   - Grayscale pixel representation of the enviornment fed into neural network to train Pacman
+   - Ghosts then train off of the Pacman with these specific neural network weights
+- Ghost AI
+   - Custom built enviornment for ghosts to initally train off of Pacman using reinforcement learning
+   - Player can also control Pacman to go against the ghost AI
+   - Ghost AI will adapt to player controls as well
 
 ### 2	Related Work
 Reinforcement learning has been done with Pac-Man for a few years now, however many implementations focus on improving the overall performance of Pac-Man. In our project, we aim to utilize reinforcement learning to improve the performance of the ghosts, while Pac-Man is controlled by a human.
