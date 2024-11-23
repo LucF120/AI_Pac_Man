@@ -1,0 +1,1 @@
+This folder contains old files that were used for experimenting on the Pacman Gymnasium environment. 
