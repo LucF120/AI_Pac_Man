@@ -29,17 +29,20 @@ For this run, the following parameters were used:
 <ol>
     <li>Normalized the inputs by dividing pixel values by 255</li>
 </ol>
-<img src="4/Rewards_Plot.png" width="200" height="200">
+<img src="4/Rewards_Plot.png" width="500" height="500">
 <br>
 <h3>Attempt 5</h3>
 <ol>
     <li>Same as attempt 4</li>
 </ol>
+<img src="5/Rewards_Plot.png" width="500" height="500">
 <br>
 <h3>Attempt 6</h3>
 <ol>
     <li>Decreased batch size from 128 to 64 </li>
 </ol>
+<img src="6/Rewards_Plot.png" width="500" height="500">
+
 <br>
 <h3>Attempt 7</h3>
 <ol>
@@ -49,38 +52,57 @@ For this run, the following parameters were used:
     <li>Waited 128 frames after pacman lost a life.</li>
     <li>Set the reward to -50 if pacman lost.</li>
 </ol>
+<img src="7/Rewards_Plot.png" width="500" height="500">
+
 <br>
-<h3>Attempt 8/9</h3>
+<h3>Attempt 8</h3>
 <ol>
     <li>Limited episodes to 1 life.</li>
 </ol>
+<img src="8/Rewards_Plot.png" width="500" height="500">
+<br>
+<h3>Attempt 9</h3>
+<ol>
+    <li>Limited episodes to 1 life.</li>
+</ol>
+<img src="9/Rewards_Plot.png" width="500" height="500">
 <br>
 <h3>Attempt 10</h3>
 <ol>
     <li>Tried to not optimize the model or save to replay memory while pacman was respawning, or frames were being skipped</li>
 </ol>
+<img src="10/Rewards_Plot.png" width="500" height="500">
+
 <br>
 <h3>Attempt 11</h3>
 <ol>
     <li>Set replay memory capacity to 10000 (up from 1000)</li>
 </ol>
+<img src="11/Rewards_Plot.png" width="500" height="500">
+
 <br>
 <h3>Attempt 12</h3>
 <ol>
     <li>Increased the batch size from 64 - 512</li>
 </ol>
+<img src="12/Rewards_Plot.png" width="500" height="500">
+
 <br>
 <h3>Attempt 13</h3>
 <ol>
     <li>Decreased batch size back to 64</li>
     <li>Decreased EPS_DECAY to 20000</li>
 </ol>
+<img src="13/Rewards_Plot.png" width="500" height="500">
+
 <br>
 <h3>Attempt 14</h3>
 <ol>
     <li>Set the learning rate to 5e-4</li>
     <li>Upped the EPS_DECAY to 1000000</li>
 </ol>
+<img src="14/Rewards_Plot.png" width="500" height="500">
+
 <br>
 <h3>Attempt 15 (Best Run So Far)</h3>
 <ol>
@@ -94,6 +116,8 @@ For this run, the following parameters were used:
     <li>REPLAY_MEMORY_CAPACITY = 10000</li>
     <li>num_episodes = 5000</li>
 </ol>
+<img src="15/Rewards_Plot.png" width="500" height="500">
+
 <h3>Attempt 16</h3>
 <ol>
     <li>Changed epsilon decay to be per episode, rather than per step</li>
@@ -102,3 +126,4 @@ For this run, the following parameters were used:
     <li>Changed the reward for eating the power pellet from 5 to 50</li>
     <li>Changed the reward for eating a ghost from 20 to 100</li>
 </ol>
+<img src="16/Rewards_Plot.png" width="500" height="500">
