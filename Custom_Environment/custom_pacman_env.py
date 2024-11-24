@@ -20,7 +20,14 @@ class PacmanEnv(gym.Env):
         # This stores the coordinates for all the pixels that belong to pacman. 
         # self.pacman must be updated in every move function 
         self.pacman = self.get_pacman_coordinates()
-        self.blinky = self.get_ghost_coordinates()
+
+        # This stores the coordinates for all the pixels that belong to blinky 
+        # Also stores whether or not blinky left spawn, since blinky needs to phase through the wall at the beginning 
+        # self.blinky must be updated in every move function 
+        self.blinky = {
+            "coordinates": self.get_ghost_coordinates(),
+            "left_spawn": False
+            }
 
     def reset(self):
         """Reset the environment."""
@@ -49,11 +56,15 @@ class PacmanEnv(gym.Env):
     # Note that it can only be used at the beginning since power pellets are the same color as blinky,
     # so this function can only look at the exact location of blinky's spawn 
     def get_ghost_coordinates(self):
-        all_coordinates = np.column_stack(np.where(self.grid == 223))
+        all_coordinates = np.column_stack(np.where(self.grid == 183))
         filtered_coordinates = all_coordinates[
             (all_coordinates[:, 0] >= 65) & (all_coordinates[:, 0] <= 100)
         ]
         return filtered_coordinates
+
+    # This function is used to move blinky, by calling the move_ghost function
+    def move_blinky(self, action):
+        self.move_ghost(self.blinky, action)
 
     # This function is used to move a ghost up, down, left, or right
     # Also, an input of 0 does nothing. 
@@ -81,63 +92,67 @@ class PacmanEnv(gym.Env):
 
     def move_ghost_left(self, ghost):
         updated_grid = np.copy(self.grid)
-        new_ghost = []
-        for coordinate in sorted(ghost, key=lambda x: x[1]):
-            if updated_grid[coordinate[0], coordinate[1] - 2] == 192:
-                if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
-                    return
+        new_ghost_coordinates = []
+        for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1]):
+            if ghost["left_spawn"]:
+                if updated_grid[coordinate[0], coordinate[1] - 2] == 192:
+                    if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
+                        return
             updated_grid[coordinate[0], coordinate[1]] = 64
             updated_grid[coordinate[0], coordinate[1] - 2] = 183
-            new_ghost.append([coordinate[0], coordinate[1] - 2])
+            new_ghost_coordinates.append([coordinate[0], coordinate[1] - 2])
         # Update the grid after ghost moved left 
         self.grid = updated_grid
-        ghost = new_ghost
+        ghost["coordinates"] = new_ghost_coordinates
         self.render()
 
     def move_ghost_right(self, ghost):
         updated_grid = np.copy(self.grid)
-        new_ghost = []
-        for coordinate in sorted(ghost, key=lambda x: x[1], reverse=True):
-            if updated_grid[coordinate[0], coordinate[1] + 2] == 192:
-                if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
-                    return
+        new_ghost_coordinates = []
+        for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1], reverse=True):
+            if ghost["left_spawn"]:
+                if updated_grid[coordinate[0], coordinate[1] + 2] == 192:
+                    if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
+                        return
             updated_grid[coordinate[0], coordinate[1]] = 64
             updated_grid[coordinate[0], coordinate[1] + 2] = 223
-            new_ghost.append([coordinate[0], coordinate[1] + 2])
+            new_ghost_coordinates.append([coordinate[0], coordinate[1] + 2])
         # Update the grid after pacman moved right 
         self.grid = updated_grid
-        ghost = new_ghost
+        ghost["coordinates"] = new_ghost_coordinates
         self.render()
 
     def move_ghost_up(self, ghost):
         updated_grid = np.copy(self.grid)
-        new_ghost = []
-        for coordinate in sorted(ghost, key=lambda x: x[0]):
-            if updated_grid[coordinate[0] - 2, coordinate[1]] == 192:
-                if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
-                    return
+        new_ghost_coordinates = []
+        for coordinate in sorted(ghost["coordinates"], key=lambda x: x[0]):
+            if ghost["left_spawn"]:
+                if updated_grid[coordinate[0] - 2, coordinate[1]] == 192:
+                    if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
+                        return
             updated_grid[coordinate[0], coordinate[1]] = 64
             updated_grid[coordinate[0] - 2, coordinate[1]] = 223
-            new_ghost.append([coordinate[0] - 2, coordinate[1]])
+            new_ghost_coordinates.append([coordinate[0] - 2, coordinate[1]])
         # Update the grid after pacman moved up 
         self.grid = updated_grid
-        ghost = new_ghost
+        ghost["coordinates"] = new_ghost_coordinates
         self.render()
     
     def move_ghost_down(self, ghost):
         updated_grid = np.copy(self.grid)
-        new_ghost = []
-        for coordinate in sorted(ghost, key=lambda x: x[0], reverse=True):
-            if updated_grid[coordinate[0] + 2, coordinate[1]] == 192:
-                if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
-                    # Return if the move is not legal 
-                    return
+        new_ghost_coordinates = []
+        for coordinate in sorted(ghost["coordinates"], key=lambda x: x[0], reverse=True):
+            if ghost["left_spawn"]:
+                if updated_grid[coordinate[0] + 2, coordinate[1]] == 192:
+                    if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
+                        # Return if the move is not legal 
+                        return
             updated_grid[coordinate[0], coordinate[1]] = 64
             updated_grid[coordinate[0] + 2, coordinate[1]] = 223
-            new_ghost.append([coordinate[0] + 2, coordinate[1]])
+            new_ghost_coordinates.append([coordinate[0] + 2, coordinate[1]])
         # Update the grid after pacman moved down 
         self.grid = updated_grid
-        ghost = new_ghost
+        ghost["coordinates"] = new_ghost_coordinates
         self.render()
 
 
