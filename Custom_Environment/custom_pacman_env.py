@@ -317,19 +317,19 @@ class PacmanEnv(gym.Env):
 
         # 1 = UP 
         if action == 1:
-            for i in range(4):
+            for i in range(8):
                 self.move_pacman_up()
         # 2 = Right 
         if action == 2:
-            for i in range(4):
+            for i in range(8):
                 self.move_pacman_right()
         # 3 = Left
         if action == 3:
-            for i in range(4):
+            for i in range(8):
                 self.move_pacman_left()
         # 4 = Down 
         if action == 4:
-            for i in range(4):
+            for i in range(8):
                 self.move_pacman_down()
         
     def move_pacman_left(self):
