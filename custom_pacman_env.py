@@ -64,7 +64,7 @@ class PacmanEnv(gym.Env):
 
         
     def move_pacman_left(self):
-        updated_grid = self.grid
+        updated_grid = np.copy(self.grid)
         pacman_coordinates = np.column_stack(np.where(self.grid == 223))
         legal_move = True
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[1]):
@@ -78,7 +78,7 @@ class PacmanEnv(gym.Env):
             self.grid = updated_grid
 
     def move_pacman_right(self):
-        updated_grid = self.grid
+        updated_grid = np.copy(self.grid)
         pacman_coordinates = np.column_stack(np.where(self.grid == 223))
         legal_move = True
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[1], reverse=True):
@@ -94,7 +94,7 @@ class PacmanEnv(gym.Env):
 
 
     def move_pacman_up(self):
-        updated_grid = self.grid
+        updated_grid = np.copy(self.grid)
         pacman_coordinates = np.column_stack(np.where(self.grid == 223))
         legal_move = True
         pacman_coordinates = np.column_stack(np.where(self.grid == 223))
@@ -102,7 +102,7 @@ class PacmanEnv(gym.Env):
             if updated_grid[coordinate[0]-1, coordinate[1]] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
                     legal_move = False
-                    break
+                    return
             updated_grid[coordinate[0], coordinate[1]] = 64
             updated_grid[coordinate[0]-1, coordinate[1]] = 223
 
@@ -110,7 +110,7 @@ class PacmanEnv(gym.Env):
             self.grid = updated_grid
     
     def move_pacman_down(self):
-        updated_grid = self.grid
+        updated_grid = np.copy(self.grid)
         pacman_coordinates = np.column_stack(np.where(self.grid == 223))
         legal_move = True
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[0], reverse=True):
