@@ -17,13 +17,22 @@ device = torch.device(
 
 # Create the Pacman environment
 env = PacmanEnv()
+# Uncomment to have a display
+# env = PacmanEnv(render_mode="human")
+
 observation, info = env.reset()
+total_reward = 0
+num_steps = 0
 while True:
+    num_steps += 1
     observation, reward, game_over = env.step(env.ghost_action_space.sample())
-    # print(f"Reward: {reward}")
+    total_reward += reward 
     if game_over:
-        print("GAME OVER")
-        break
+        print(f"GAME OVER.   Total Reward: {total_reward}       Num Steps: {num_steps}")
+        observation, info = env.reset()
+        num_steps = 0
+        total_reward = 0
+
 
 # n_actions = env.pacman_action_space.n
 # policy_net = DQN(n_actions).to(device)

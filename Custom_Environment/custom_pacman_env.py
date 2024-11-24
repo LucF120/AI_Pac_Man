@@ -23,9 +23,11 @@ gym.register_envs(ale_py)
 # This is the environment where we train the ghosts against a pre-trained pacman.
 class PacmanEnv(gym.Env):
     def __init__(self, render_mode=None):
+        self.render_mode = render_mode
         self.grid = (gym.make("ALE/Pacman-v5", obs_type="grayscale").reset()[0])[20:200, 0:]
 
-        self.height, self.width = self.grid.shape
+        self.width = 160
+        self.height = 180
         
         self.ghost_action_space = gym.spaces.Discrete(4)  # 4 actions: up, right, left, down 
         self.pacman_action_space = gym.spaces.Discrete(5) # 5 actions: NOOP, up, right, left, down 
@@ -77,7 +79,7 @@ class PacmanEnv(gym.Env):
     def render(self):
         """Render the environment."""
         # Only render the environment if render_mode is set 
-        if self.render_mode != None:
+        if self.render_mode == "human":
             plt.imshow(self.grid, cmap="gray", interpolation="nearest")
             plt.draw()
             plt.pause(0.00001)  # Pause for 0.1 seconds to show the update
@@ -164,7 +166,7 @@ class PacmanEnv(gym.Env):
         if self.game_over:
             return 10
         else:
-            return -1
+            return -0.01
         
     # Helper function for move_ghost 
     def move_ghost_left(self, ghost):
@@ -174,7 +176,7 @@ class PacmanEnv(gym.Env):
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1]):
             # Check if attempted movement is out of bounds
-            if coordinate[1] -1 <= self.width:
+            if coordinate[1] -1 <= 0:
                 return
             # Checks if the ghost caught pacman
             if updated_grid[coordinate[0], coordinate[1] - 1] == 223:
@@ -243,7 +245,7 @@ class PacmanEnv(gym.Env):
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[0]):
             # Check if attempted movement is out of bounds
-            if coordinate[0] - 1 <= self.height:
+            if coordinate[0] - 1 <= 0:
                 return
             # Checks if the ghost caught pacman
             if updated_grid[coordinate[0] - 1, coordinate[1]] == 223:
@@ -379,7 +381,7 @@ class PacmanEnv(gym.Env):
         new_pacman = []
         for coordinate in sorted(self.pacman, key=lambda x: x[1]):
             # Check if attempted movement is out of bounds
-            if coordinate[1] -1 <= self.width:
+            if coordinate[1] -1 <= 0:
                 return
             if updated_grid[coordinate[0], coordinate[1] - 1] == 192:
                 if not self.is_valid_pip_location(coordinate[1] - 1, coordinate[0]):
@@ -417,7 +419,7 @@ class PacmanEnv(gym.Env):
         new_pacman = []
         for coordinate in sorted(self.pacman, key=lambda x: x[0]):
             # Check if attempted movement is out of bounds
-            if coordinate[0] - 1 <= self.height:
+            if coordinate[0] - 1 <= 0:
                 return
             if updated_grid[coordinate[0] - 1, coordinate[1]] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0] - 1):
@@ -467,42 +469,22 @@ class PacmanEnv(gym.Env):
         if (y <= 4 or y >= 175) and (x <= 75 or x >= 84):
             return False
 
-        # Check if hitting walls that are aligned with pips 
-        if (x >=32 and x <=35) or (x >= 124 and x <= 127):
-            if (y >= 34 and y <= 35):
-                return False
-            if (y >= 78 and y <= 79):
-                return False
-            if (y >=122 and y <= 123):
-                return False
-            if (y >= 166 and y <= 167):
-                return False
-        if (x >= 60 and x <= 63) or (x>=96 and x <=99):
-            if (y >= 12 and y <= 13):
-                return False
-            if (y >= 56 and y <= 57):
-                return False
-            if (y >=100 and y <= 101):
-                return False
-            if (y >= 144 and y <= 145):
-                return False
-
         # Check if y is aligned with pips (x has already been checked above) 
-        if y >= 6 and y <= 20:
+        if (y >= 6 and y <= 20) and not (x >= 60 and x <= 63) and not (x>=96 and x <=99):
             return True
-        elif y >= 27 and y <= 42:
+        elif (y >= 27 and y <= 42) and not (x >=32 and x <=35) and not (x >= 124 and x <= 127):
             return True
-        elif y >= 49 and y <= 64:
+        elif (y >= 49 and y <= 64) and not (x >= 60 and x <= 63) and not (x>=96 and x <=99):
             return True
-        elif y >= 71 and y <= 86:
+        elif (y >= 71 and y <= 86) and not (x >=32 and x <=35) and not (x >= 124 and x <= 127):
             return True
-        elif y >= 93 and y <= 108:
+        elif (y >= 93 and y <= 108) and not (x >= 60 and x <= 63) and not (x>=96 and x <=99):
             return True
-        elif y >= 115 and y <= 130:
+        elif (y >= 115 and y <= 130) and not (x >=32 and x <=35) and not (x >= 124 and x <= 127):
             return True
-        elif y >= 137 and y <= 152:
+        elif (y >= 137 and y <= 152) and not (x >= 60 and x <= 63) and not (x>=96 and x <=99):
             return True
-        elif y >= 159 and y <= 174:
+        elif (y >= 159 and y <= 174) and not (x >=32 and x <=35) and not (x >= 124 and x <= 127):
             return True
         else:
             return False 
