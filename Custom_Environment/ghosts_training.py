@@ -24,8 +24,10 @@ device = torch.device(
 )
 
 # Create the Pacman environment
-env = PacmanEnv(render_mode="human")
+env = PacmanEnv()
 
+epsilon = 0.99
+epsilon_decay_rate = 0.999999
 # Training loop
 total_rewards = []
 for i_episode in range(1000):
@@ -35,45 +37,138 @@ for i_episode in range(1000):
     while True:
         step_count += 1
         blinky_coordinates = env.blinky["coordinates"][0]
+        if env.pinky["spawned"]:
+            pinky_coordinates = env.pinky["coordinates"][0]
+        else:
+            pinky_coordinates = [80, 80]
+
+        if env.inky["spawned"]:
+            inky_coordinates = env.inky["coordinates"][0]
+        else:
+            inky_coordinates = [80, 80]
+
+        if env.clyde["spawned"]:
+            clyde_coordinates = env.clyde["coordinates"][0]
+        else:
+            clyde_coordinates = [80, 80]
         pacman_coordinates = env.pacman[0]
-        inputs = np.array([blinky_coordinates[0], blinky_coordinates[1], pacman_coordinates[0], pacman_coordinates[1]])
+        inputs = np.array([
+            blinky_coordinates[0] / 160.0, 
+            blinky_coordinates[1] / 180.0, 
+            pinky_coordinates[0] / 160.0, 
+            pinky_coordinates[1] / 180.0, 
+            inky_coordinates[0] / 160.0, 
+            inky_coordinates[1] / 180.0, 
+            clyde_coordinates[0] / 160.0, 
+            clyde_coordinates[1] / 180.0, 
+            pacman_coordinates[0] / 160.0, 
+            pacman_coordinates[1] /180.0])
         inputs = torch.tensor(inputs, dtype=torch.float)
 
+
         # Got help from GenAI to figure out how to pass in the target action 
-        distances = []
-        actions = [
+        blinky_distances = []
+        blinky_actions = [
         (blinky_coordinates[0] - 1, blinky_coordinates[1]),  # Move up
         (blinky_coordinates[0] + 1, blinky_coordinates[1]),  # Move down
         (blinky_coordinates[0], blinky_coordinates[1] - 1),  # Move left
         (blinky_coordinates[0], blinky_coordinates[1] + 1),  # Move right
         ]
+        
+        pinky_distances = []
+        pinky_actions = [
+        (pinky_coordinates[0] - 1, pinky_coordinates[1]),  # Move up
+        (pinky_coordinates[0] + 1, pinky_coordinates[1]),  # Move down
+        (pinky_coordinates[0], pinky_coordinates[1] - 1),  # Move left
+        (pinky_coordinates[0], pinky_coordinates[1] + 1),  # Move right
+        ]
 
-        for action in actions:
+        inky_distances = []
+        inky_actions = [
+        (inky_coordinates[0] - 1, inky_coordinates[1]),  # Move up
+        (inky_coordinates[0] + 1, inky_coordinates[1]),  # Move down
+        (inky_coordinates[0], inky_coordinates[1] - 1),  # Move left
+        (inky_coordinates[0], inky_coordinates[1] + 1),  # Move right
+        ]
+
+        clyde_distances = []
+        clyde_actions = [
+        (clyde_coordinates[0] - 1, clyde_coordinates[1]),  # Move up
+        (clyde_coordinates[0] + 1, clyde_coordinates[1]),  # Move down
+        (clyde_coordinates[0], clyde_coordinates[1] - 1),  # Move left
+        (clyde_coordinates[0], clyde_coordinates[1] + 1),  # Move right
+        ]
+        
+
+        for action in blinky_actions:
             dist = abs(action[0] - pacman_coordinates[0]) + abs(action[1] - pacman_coordinates[1])
-            distances.append(dist)
-            
-        target_action = distances.index(min(distances))
-        target = torch.tensor([target_action], dtype=torch.long)
+            blinky_distances.append(dist)
+
+        for action in pinky_actions:
+            dist = abs(action[0] - pacman_coordinates[0]) + abs(action[1] - pacman_coordinates[1])
+            pinky_distances.append(dist)
+
+        for action in inky_actions:
+            dist = abs(action[0] - pacman_coordinates[0]) + abs(action[1] - pacman_coordinates[1])
+            inky_distances.append(dist)
+        
+        for action in clyde_actions:
+            dist = abs(action[0] - pacman_coordinates[0]) + abs(action[1] - pacman_coordinates[1])
+            clyde_distances.append(dist)
+
 
         # Forward pass
         outputs = ghost_nn(inputs)
-        loss = criterion(outputs.unsqueeze(0), target)
 
         # Backward pass and optimization
         optimizer.zero_grad()
+        
+        blinky_target_action = blinky_distances.index(min(blinky_distances))
+        pinky_target_action = pinky_distances.index(min(pinky_distances))
+        inky_target_action = inky_distances.index(min(inky_distances))
+        clyde_target_action = clyde_distances.index(min(clyde_distances))
+
+        #Get the outputs for each ghost (assuming outputs is of shape [batch_size, num_actions])
+        # Each ghost has 4 possible actions, so we split the outputs tensor into 4 chunks
+        blinky_output = outputs[0:4]  # First 4 values correspond to Blinky's actions
+        pinky_output = outputs[4:8]   # Next 4 values correspond to Pinky's actions
+        inky_output = outputs[8:12]  # Next 4 values correspond to Inky's actions
+        clyde_output = outputs[12:16] # Last 4 values correspond to Clyde's actions
+
+        blinky_loss = criterion(blinky_output.unsqueeze(0), torch.tensor([blinky_target_action], dtype=torch.long))
+        pinky_loss = criterion(pinky_output.unsqueeze(0), torch.tensor([pinky_target_action], dtype=torch.long))
+        inky_loss = criterion(inky_output.unsqueeze(0), torch.tensor([inky_target_action], dtype=torch.long))
+        clyde_loss = criterion(clyde_output.unsqueeze(0), torch.tensor([clyde_target_action], dtype=torch.long))
+
+
+        loss = blinky_loss + pinky_loss + inky_loss + clyde_loss
         loss.backward()
         optimizer.step()
 
-        predicted_action = torch.argmax(outputs).item()
-        actions = (predicted_action, 0, 0, 0)
-        observation, reward, game_over = env.step(actions)
+
+        probabilities = [torch.softmax(outputs[i:i+4], dim=0) for i in range(0, 16, 4)]
+        print(probabilities)
+
+        if np.random.rand() < epsilon:
+            # Randomly select an action for exploration
+            predicted_action1 = np.random.choice([0, 1, 2, 3])
+            predicted_action2 = np.random.choice([0, 1, 2, 3])
+            predicted_action3 = np.random.choice([0, 1, 2, 3])
+            predicted_action4 = np.random.choice([0, 1, 2, 3])
+
+            predicted_actions = (predicted_action1, predicted_action2, predicted_action3, predicted_action4)
+        else:
+            # Otherwise, use the model's prediction
+            predicted_actions = (probabilities[0], probabilities[1], probabilities[2], probabilities[3])
+
+        observation, reward, game_over = env.step(predicted_actions)
         total_reward += reward 
+        epsilon = epsilon * epsilon_decay_rate
         if game_over:
             break
-        if step_count % 100 == 0:
-            print(f"Step count: {step_count}")
 
-    print(f"Episode {i_episode}, Loss: {loss.item()},   Total Reward: {total_reward}")
+
+    print(f"Episode {i_episode},    Step count: {step_count},       Loss: {loss.item()},   Total Reward: {total_reward}     Epsilon: {epsilon}")
     total_rewards.append(total_reward)
 
 print("Training complete!")
