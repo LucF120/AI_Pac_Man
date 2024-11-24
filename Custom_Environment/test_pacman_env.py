@@ -20,11 +20,10 @@ env = PacmanEnv()
 observation, info = env.reset()
 while True:
     observation, reward, game_over = env.step(env.ghost_action_space.sample())
-    print(f"Reward: {reward}")
+    # print(f"Reward: {reward}")
     if game_over:
         print("GAME OVER")
         break
-
 
 # n_actions = env.pacman_action_space.n
 # policy_net = DQN(n_actions).to(device)
