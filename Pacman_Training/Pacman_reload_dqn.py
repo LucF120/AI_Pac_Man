@@ -48,19 +48,19 @@ def save_execution(target_net_dict, policy_net_dict, memory, BATCH_SIZE, GAMMA, 
     print("Finished saving execution to previous_run/")
     print("-------------------------------------------------------------")
 
-def load_execution(policy_net, target_net=None, memory=None, only_policy_net=False):
+def load_execution(policy_net, target_net=None, memory=None, only_policy_net=False, dirpath="previous_run/"):
     print("Loading previous execution")
     # This loads the saved weights ------------------------------------------------------------------------
-    policy_net.load_state_dict(torch.load('previous_run/policy_net.pth', weights_only=True, map_location=device))
+    policy_net.load_state_dict(torch.load(f"{dirpath}policy_net.pth", weights_only=True, map_location=device))
     if only_policy_net:
         return
 
 
     if target_net:
-        target_net.load_state_dict(torch.load('previous_run/target_net.pth', weights_only=True, map_location=device))
+        target_net.load_state_dict(torch.load(f"{dirpath}target_net.pth", weights_only=True, map_location=device))
 
     # To load the old hyperparameters  ------------------------------------------------------------------------
-    with open('previous_run/hyperparameters.pkl', 'rb') as f:
+    with open(f"{dirpath}hyperparameters.pkl", 'rb') as f:
         loaded_hyperparameters = pickle.load(f)
 
     BATCH_SIZE = loaded_hyperparameters['BATCH_SIZE']
@@ -76,7 +76,7 @@ def load_execution(policy_net, target_net=None, memory=None, only_policy_net=Fal
     # To load the ReplayMemory ------------------------------------------------------------------------
     if memory:
         memory = ReplayMemory(REPLAY_MEMORY_CAPACITY)
-        with open("previous_run/replay_memory.pkl", "rb") as f:
+        with open(f"{dirpath}replay_memory.pkl", "rb") as f:
             memory.memory = pickle.load(f)
 
     print("Finished loading previous execution")
