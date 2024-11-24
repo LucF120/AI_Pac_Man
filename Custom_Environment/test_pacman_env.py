@@ -17,14 +17,22 @@ device = torch.device(
 
 # Create the Pacman environment
 env = PacmanEnv()
+observation, info = env.reset()
+while True:
+    observation, reward, game_over = env.step(env.ghost_action_space.sample())
+    print(f"Reward: {reward}")
+    if game_over:
+        print("GAME OVER")
+        break
 
-n_actions = env.pacman_action_space.n
-policy_net = DQN(n_actions).to(device)
 
-load_execution(policy_net, only_policy_net=True, dirpath="")
+# n_actions = env.pacman_action_space.n
+# policy_net = DQN(n_actions).to(device)
 
-def select_action(state):
-    return policy_net(state).max(1).indices.view(1, 1)
+# load_execution(policy_net, only_policy_net=True, dirpath="")
+
+# def select_action(state):
+#     return policy_net(state).max(1).indices.view(1, 1)
 
 
 # # Test environment
@@ -57,15 +65,15 @@ def select_action(state):
 # for i in range(1000):
 #     env.move_blinky(env.ghost_action_space.sample())
 
-state = env.grid 
-env.render()
-#Test random movements
-for i in range(100):
-    state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0) / 255.0
-    state = state.unsqueeze(1)
-    action = select_action(state)
-    print(f"Action: {action.item()}")
-    env.move_blinky(env.ghost_action_space.sample())
-    env.move_pacman(action.item())
-    env.render()
-    state = env.grid 
+# state = env.grid 
+# env.render()
+# #Test random movements
+# for i in range(100):
+#     state = torch.tensor(state, device=device, dtype=torch.float32).unsqueeze(0) / 255.0
+#     state = state.unsqueeze(1)
+#     action = select_action(state)
+#     print(f"Action: {action.item()}")
+#     env.move_blinky(env.ghost_action_space.sample())
+#     env.move_pacman(action.item())
+#     env.render()
+#     state = env.grid 
