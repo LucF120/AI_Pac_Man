@@ -22,7 +22,7 @@ gym.register_envs(ale_py)
 # This class is a custom gynasium environment for Pacman.
 # This is the environment where we train the ghosts against a pre-trained pacman.
 class PacmanEnv(gym.Env):
-    def __init__(self):
+    def __init__(self, render_mode=None):
         self.grid = (gym.make("ALE/Pacman-v5", obs_type="grayscale").reset()[0])[20:200, 0:]
 
         self.height, self.width = self.grid.shape
@@ -76,10 +76,12 @@ class PacmanEnv(gym.Env):
 
     def render(self):
         """Render the environment."""
-        plt.imshow(self.grid, cmap="gray", interpolation="nearest")
-        plt.draw()
-        plt.pause(0.00001)  # Pause for 0.1 seconds to show the update
-        plt.clf()  # Clear the figure for the next frame
+        # Only render the environment if render_mode is set 
+        if self.render_mode != None:
+            plt.imshow(self.grid, cmap="gray", interpolation="nearest")
+            plt.draw()
+            plt.pause(0.00001)  # Pause for 0.1 seconds to show the update
+            plt.clf()  # Clear the figure for the next frame
         
     def select_pacman_action(self):
         state = torch.tensor(self.grid, device=device, dtype=torch.float32).unsqueeze(0) / 255.0
@@ -171,6 +173,9 @@ class PacmanEnv(gym.Env):
         left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1]):
+            # Check if attempted movement is out of bounds
+            if coordinate[1] -1 <= self.width:
+                return
             # Checks if the ghost caught pacman
             if updated_grid[coordinate[0], coordinate[1] - 1] == 223:
                 self.game_over = True
@@ -204,6 +209,9 @@ class PacmanEnv(gym.Env):
         left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1], reverse=True):
+            # Check if attempted movement is out of bounds
+            if coordinate[1] + 1 >= self.width:
+                return
             # Checks if the ghost caught pacman
             if updated_grid[coordinate[0], coordinate[1] + 1] == 223:
                 self.game_over = True
@@ -234,6 +242,9 @@ class PacmanEnv(gym.Env):
         left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[0]):
+            # Check if attempted movement is out of bounds
+            if coordinate[0] - 1 <= self.height:
+                return
             # Checks if the ghost caught pacman
             if updated_grid[coordinate[0] - 1, coordinate[1]] == 223:
                 self.game_over = True
@@ -265,6 +276,9 @@ class PacmanEnv(gym.Env):
         left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[0], reverse=True):
+            # Check if attempted movement is out of bounds
+            if coordinate[0] + 1 >= self.height:
+                return
             # Checks if the ghost caught pacman
             if updated_grid[coordinate[0] + 1, coordinate[1]] == 223:
                 self.game_over = True
@@ -364,6 +378,9 @@ class PacmanEnv(gym.Env):
         updated_grid = np.copy(self.grid)
         new_pacman = []
         for coordinate in sorted(self.pacman, key=lambda x: x[1]):
+            # Check if attempted movement is out of bounds
+            if coordinate[1] -1 <= self.width:
+                return
             if updated_grid[coordinate[0], coordinate[1] - 1] == 192:
                 if not self.is_valid_pip_location(coordinate[1] - 1, coordinate[0]):
                     return
@@ -379,6 +396,9 @@ class PacmanEnv(gym.Env):
         updated_grid = np.copy(self.grid)
         new_pacman = []
         for coordinate in sorted(self.pacman, key=lambda x: x[1], reverse=True):
+            # Check if attempted movement is out of bounds
+            if coordinate[1] + 1 >= self.width:
+                return
             if updated_grid[coordinate[0], coordinate[1] + 1] == 192:
                 if not self.is_valid_pip_location(coordinate[1] + 1, coordinate[0]):
                     return
@@ -396,6 +416,9 @@ class PacmanEnv(gym.Env):
         updated_grid = np.copy(self.grid)
         new_pacman = []
         for coordinate in sorted(self.pacman, key=lambda x: x[0]):
+            # Check if attempted movement is out of bounds
+            if coordinate[0] - 1 <= self.height:
+                return
             if updated_grid[coordinate[0] - 1, coordinate[1]] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0] - 1):
                     return
@@ -412,6 +435,9 @@ class PacmanEnv(gym.Env):
         updated_grid = np.copy(self.grid)
         new_pacman = []
         for coordinate in sorted(self.pacman, key=lambda x: x[0], reverse=True):
+            # Check if attempted movement is out of bounds
+            if coordinate[0] + 1 >= self.height:
+                return
             if updated_grid[coordinate[0] + 1, coordinate[1]] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0] + 1):
                     # Return if the move is not legal 
