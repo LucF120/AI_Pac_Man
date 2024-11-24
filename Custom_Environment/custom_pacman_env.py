@@ -29,16 +29,28 @@ class PacmanEnv(gym.Env):
             "left_spawn": False
             }
         
+        # Tracks whether or not a ghost caught pacman 
+        self.game_over = False
         # This stores pips that the ghost traveled over so they can be replaced later 
         self.pips_to_restore = []
-        
+
     def reset(self):
         """Reset the environment."""
-        self._init_entities() 
-        return self.grid
+        self.grid = (gym.make("ALE/Pacman-v5", obs_type="grayscale").reset()[0])[20:200, 0:]
+        self.pips_to_restore = []
+        self.game_over = False
+        self.blinky = {
+            "coordinates": self.get_ghost_coordinates(),
+            "left_spawn": False
+        }
+        self.pacman = self.get_pacman_coordinates()
 
     def step(self, action):
         """Apply an action and return the new state, reward, and done status."""
+        # Taking random pacman action for now. Will incorporate the neural network policy soon. 
+        self.move_pacman(self.pacman_action_space.sample())
+        reward = self.move_blinky(action)
+        return self.grid, reward, self.game_over 
 
     def render(self):
         """Render the environment."""
@@ -46,11 +58,6 @@ class PacmanEnv(gym.Env):
         plt.draw()
         plt.pause(0.00001)  # Pause for 0.1 seconds to show the update
         plt.clf()  # Clear the figure for the next frame
-
-
-    def _check_game_over(self):
-        """Check if Pacman is caught by a ghost."""
-
         
     # This function is used to get blinky's position at the beginning of the game 
     # Note that it can only be used at the beginning since power pellets are the same color as blinky,
@@ -64,7 +71,7 @@ class PacmanEnv(gym.Env):
 
     # This function is used to move blinky, by calling the move_ghost function
     def move_blinky(self, action):
-        self.move_ghost(self.blinky, action)
+        return self.move_ghost(self.blinky, action)
 
     # This function is used to move a ghost up, down, left, or right
     # Also, an input of 0 does nothing. 
@@ -97,6 +104,11 @@ class PacmanEnv(gym.Env):
             else:
                 self.pips_to_restore.append(coordinate)
         self.render()
+        # Return a reward of 10 if the ghost caught pacman, and -1 otherwise 
+        if self.game_over:
+            return 10
+        else:
+            return -1
 
     # The way ghost movement works:
     # - Make a copy of the grid
@@ -117,6 +129,9 @@ class PacmanEnv(gym.Env):
         left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1]):
+            # Checks if the ghost caught pacman
+            if updated_grid[coordinate[0], coordinate[1] - 2] == 223:
+                self.game_over = True
             # Checks if the ghost is colliding with a wall only if they haven't left spawn yet 
             if updated_grid[coordinate[0], coordinate[1] - 2] == 192:
                 if not self.is_valid_pip_location(coordinate[1] - 2, coordinate[0]) and ghost["left_spawn"] == True:
@@ -147,6 +162,10 @@ class PacmanEnv(gym.Env):
         left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1], reverse=True):
+            # Checks if the ghost caught pacman
+            if updated_grid[coordinate[0], coordinate[1] - 2] == 223:
+                self.game_over = True
+
             if updated_grid[coordinate[0], coordinate[1] + 2] == 192:
                 if not self.is_valid_pip_location(coordinate[1] + 2, coordinate[0]) and ghost["left_spawn"] == True:
                     return
@@ -173,6 +192,10 @@ class PacmanEnv(gym.Env):
         left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[0]):
+            # Checks if the ghost caught pacman
+            if updated_grid[coordinate[0], coordinate[1] - 2] == 223:
+                self.game_over = True
+
             if updated_grid[coordinate[0] - 2, coordinate[1]] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0] - 2) and ghost["left_spawn"] == True:
                     return
@@ -200,6 +223,10 @@ class PacmanEnv(gym.Env):
         left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[0], reverse=True):
+            # Checks if the ghost caught pacman
+            if updated_grid[coordinate[0], coordinate[1] - 2] == 223:
+                self.game_over = True
+
             if updated_grid[coordinate[0] + 2, coordinate[1]] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0] + 2) and ghost["left_spawn"] == True:
                     # Return if the move is not legal 
