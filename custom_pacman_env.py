@@ -6,18 +6,16 @@ import ale_py
 
 gym.register_envs(ale_py)
 
-# Define the Pacman environment
 class PacmanEnv(gym.Env):
     def __init__(self):
         self.grid = (gym.make("ALE/Pacman-v5", obs_type="grayscale").reset()[0])[20:200, 0:]
 
         self.height, self.width = self.grid.shape
         
-        # Define action space (e.g., up, down, left, right)
-        self.action_space = gym.spaces.Discrete(5)  # 4 actions: up, down, left, right
+        self.ghost_action_space = gym.spaces.Discrete(4)  # 4 actions: up, right, left, down 
+        self.pacman_action_space = gym.spaces.Discrete(5) # 5 actions: NOOP, up, right, left, down 
 
 
-        # Initial positions (these should be initialized based on your grid)
         self.pacman_pos = None
         self.ghost_positions = []
         self.pill_positions = []
@@ -28,7 +26,7 @@ class PacmanEnv(gym.Env):
         """Init entities."""
     def reset(self):
         """Reset the environment."""
-        self._init_entities()  # Re-initialize the entities
+        self._init_entities() 
         return self.grid
 
     def step(self, action):
@@ -45,12 +43,30 @@ class PacmanEnv(gym.Env):
     def _check_game_over(self):
         """Check if Pacman is caught by a ghost."""
 
+    def move_pacman(self, action):
+        # 0 = NOOP
+        if action == 0:
+            return
+        # 1 = UP 
+        if action == 1:
+            return self.move_pacman_up()
+        # 2 = Right 
+        if action == 2:
+            return self.move_pacman_right()
+        # 3 = Left
+        if action == 3:
+            return self.move_pacman_left()
+        # 4 = Down 
+        if action == 4:
+            return self.move_pacman_down()
+
+        
     def move_pacman_left(self):
         updated_grid = self.grid
         pacman_coordinates = np.column_stack(np.where(self.grid == 223))
         legal_move = True
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[1]):
-            if updated_grid[coordinate[0], coordinate[1] + 1] == 192:
+            if updated_grid[coordinate[0], coordinate[1] - 1] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
                     legal_move = False
                     break
@@ -76,16 +92,34 @@ class PacmanEnv(gym.Env):
 
 
     def move_pacman_up(self):
+        updated_grid = self.grid
+        pacman_coordinates = np.column_stack(np.where(self.grid == 223))
+        legal_move = True
         pacman_coordinates = np.column_stack(np.where(self.grid == 223))
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[0]):
+            if updated_grid[coordinate[0]-1, coordinate[1]] == 192:
+                if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
+                    legal_move = False
+                    break
             self.grid[coordinate[0], coordinate[1]] = 64
             self.grid[coordinate[0]-1, coordinate[1]] = 223
+
+        if legal_move:
+            self.grid = updated_grid
     
     def move_pacman_down(self):
+        updated_grid = self.grid
         pacman_coordinates = np.column_stack(np.where(self.grid == 223))
+        legal_move = True
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[0], reverse=True):
+            if updated_grid[coordinate[0]+1, coordinate[1]] == 192:
+                if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
+                    legal_move = False
+                    break
             self.grid[coordinate[0], coordinate[1]] = 64
             self.grid[coordinate[0] + 1, coordinate[1]] = 223
+        if legal_move:
+            self.grid = updated_grid
 
     def is_valid_pip_location(self, x, y):
         if y >= 10 and y <= 15:
@@ -114,23 +148,23 @@ env = PacmanEnv()
 env.render()
 
 #Test moving right
-for i in range(30):
+for i in range(200):
     env.move_pacman_right()
 env.render()
 
 
 #Test moving left
-for i in range(30):
+for i in range(200):
     env.move_pacman_left()
 env.render()
 
 
 # Test moving up
-for i in range(30):
+for i in range(200):
     env.move_pacman_up()
 env.render()
 
 # Test moving down
-for i in range(30):
+for i in range(200):
     env.move_pacman_down()
 env.render()
