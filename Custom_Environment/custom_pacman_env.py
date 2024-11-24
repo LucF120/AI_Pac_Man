@@ -107,6 +107,7 @@ class PacmanEnv(gym.Env):
             "spawned": False
             }
         self.pacman = self.get_pacman_coordinates()
+        self.spawn_counter = 0
         
         # Stores the number of lives left for pacman. Still need to configure this. 
         self.info = []
@@ -576,10 +577,10 @@ class PacmanEnv(gym.Env):
         if self.coord_in_spawn_wall(x, y):
             return False
         # Check if hitting left or right wall 
-        if x <= 3 or x >= 156:
+        if x <= 4 or x >= 155:
             return False
         # Check if hitting top or bottom wall 
-        if (y <= 4 or y >= 175) and (x <= 75 or x >= 84):
+        if (y <= 5 or y >= 174) and (x <= 75 or x >= 84):
             return False
 
         # Check if y is aligned with pips (x has already been checked above) 
