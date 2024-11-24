@@ -47,80 +47,86 @@ class PacmanEnv(gym.Env):
     def get_pacman_coordinates(self):
         return np.column_stack(np.where(self.grid == 223))
     def move_pacman(self, action):
-        # 0 = NOOP
-        if action == 0:
-            self.render()
+        # 0 = NOOP: Do nothing
+
         # 1 = UP 
         if action == 1:
-            self.move_pacman_up()
+            for i in range(4):
+                self.move_pacman_up()
         # 2 = Right 
         if action == 2:
-            self.move_pacman_right()
+            for i in range(4):
+                self.move_pacman_right()
         # 3 = Left
         if action == 3:
-            self.move_pacman_left()
+            for i in range(4):
+                self.move_pacman_left()
         # 4 = Down 
         if action == 4:
-            self.move_pacman_down()
-        self.render()
+            for i in range(4):
+                self.move_pacman_down()
 
         
     def move_pacman_left(self):
         updated_grid = np.copy(self.grid)
         pacman_coordinates = self.get_pacman_coordinates()
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[1]):
-            if updated_grid[coordinate[0], coordinate[1] - 1] == 192:
+            if updated_grid[coordinate[0], coordinate[1] - 2] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
                     return
             updated_grid[coordinate[0], coordinate[1]] = 64
-            updated_grid[coordinate[0], coordinate[1]-1] = 223
+            updated_grid[coordinate[0], coordinate[1] - 2] = 223
         # Update the grid after pacman moved left 
         self.grid = updated_grid
+        self.render()
 
     def move_pacman_right(self):
         updated_grid = np.copy(self.grid)
         pacman_coordinates = self.get_pacman_coordinates()
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[1], reverse=True):
-            if updated_grid[coordinate[0], coordinate[1] + 1] == 192:
+            if updated_grid[coordinate[0], coordinate[1] + 2] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
                     return
             updated_grid[coordinate[0], coordinate[1]] = 64
-            updated_grid[coordinate[0], coordinate[1]+1] = 223
+            updated_grid[coordinate[0], coordinate[1] + 2] = 223
         
         # Update the grid after pacman moved right 
         self.grid = updated_grid
+        self.render()
 
 
     def move_pacman_up(self):
         updated_grid = np.copy(self.grid)
         pacman_coordinates = self.get_pacman_coordinates()
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[0]):
-            if updated_grid[coordinate[0]-1, coordinate[1]] == 192:
+            if updated_grid[coordinate[0] - 2, coordinate[1]] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
                     return
             updated_grid[coordinate[0], coordinate[1]] = 64
-            updated_grid[coordinate[0]-1, coordinate[1]] = 223
+            updated_grid[coordinate[0] - 2, coordinate[1]] = 223
 
         # Update the grid after pacman moved up 
         self.grid = updated_grid
+        self.render()
     
     def move_pacman_down(self):
         updated_grid = np.copy(self.grid)
         pacman_coordinates = self.get_pacman_coordinates()
         for coordinate in sorted(pacman_coordinates, key=lambda x: x[0], reverse=True):
-            if updated_grid[coordinate[0]+1, coordinate[1]] == 192:
+            if updated_grid[coordinate[0] + 2, coordinate[1]] == 192:
                 if not self.is_valid_pip_location(coordinate[1], coordinate[0]):
                     # Return if the move is not legal 
                     return
             updated_grid[coordinate[0], coordinate[1]] = 64
-            updated_grid[coordinate[0] + 1, coordinate[1]] = 223
+            updated_grid[coordinate[0] + 2, coordinate[1]] = 223
         # Update the grid after pacman moved down 
         self.grid = updated_grid
+        self.render()
 
     def is_valid_pip_location(self, x, y):
-        if y >= 10 and y <= 15:
+        if y >= 11 and y <= 14:
             return True
-        elif y >= 32 and y <= 36:
+        elif y >= 33 and y <= 36:
             return True
         elif y >= 55 and y <= 58:
             return True
