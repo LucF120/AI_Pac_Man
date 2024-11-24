@@ -55,6 +55,11 @@ class PacmanEnv(gym.Env):
         ]
         return filtered_coordinates
 
+    # This function is used to move a ghost up, down, left, or right
+    # Also, an input of 0 does nothing. 
+    # It takes in a ghost as input, since there are 4 different ghosts. 
+    # Helper functions are move_ghost_left, move_ghost_right,
+    # move_ghost_down, and move_ghost_up
     def move_ghost(self, ghost, action):
         # 1 = UP 
         if action == 1:
@@ -104,7 +109,6 @@ class PacmanEnv(gym.Env):
         ghost = new_ghost
         self.render()
 
-
     def move_ghost_up(self, ghost):
         updated_grid = np.copy(self.grid)
         new_ghost = []
@@ -143,10 +147,15 @@ class PacmanEnv(gym.Env):
 
 
 
-
+    # This function is used in the init function to get pacman's initial coordinates. 
+    # Afterwards, his coordinates are updated by the move functions. 
     def get_pacman_coordinates(self):
         return np.column_stack(np.where(self.grid == 223))
     
+    # This function is used to move pacman up, down, left, or right. 
+    # Also, an input of 0 does nothing. 
+    # Helper functions are move_pacman_left, move_pacman_right,
+    # move_pacman_down, and move_pacman_up
     def move_pacman(self, action):
         # 0 = NOOP: Do nothing
 
@@ -232,6 +241,12 @@ class PacmanEnv(gym.Env):
         self.pacman = np.array(new_pacman)
         self.render()
 
+    # This function is used to check to see if pacman is bumping into a wall or a pip
+    # It is needed because pips and walls are the same color in the observation. 
+    # The function checks if the pip in question is at the same y level as a pip. If it is, then 
+    # pacman is allowed to collide with it. 
+    # Pacman is still not able to phase through walls because pacman is taller than the pips, so 
+    # if there is an actual wall, the top of pacman's head will trigger this function to return false. 
     def is_valid_pip_location(self, x, y):
         if y >= 11 and y <= 14:
             return True
