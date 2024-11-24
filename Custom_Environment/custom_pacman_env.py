@@ -44,9 +44,34 @@ class PacmanEnv(gym.Env):
         # Also stores whether or not blinky left spawn, since blinky needs to phase through the wall at the beginning 
         # self.blinky must be updated in every move function 
         self.blinky = {
+            "name": "blinky",
             "coordinates": self.get_ghost_coordinates(),
             "left_spawn": False
             }
+        self.pinky = {
+            "name": "pinky",
+            "coordinates": None,
+            "left_spawn": False,
+            "spawned": False
+            }
+        self.inky = {
+            "name": "inky",
+            "coordinates": None,
+            "left_spawn": False,
+            "spawned": False  
+            }
+        self.clyde = {
+            "name": "clyde",
+            "coordinates": None,
+            "left_spawn": False,
+            "spawned": False
+            }
+        
+        # This keeps track of the number of ghost movements made. 
+        # After 100 movements, pinky spawns
+        # After 200 movements, inky spawns
+        # After 300 movements, clyde spawns
+        self.spawn_counter = 0
         
         # Tracks whether or not a ghost caught pacman 
         self.game_over = False
@@ -59,9 +84,28 @@ class PacmanEnv(gym.Env):
         self.pips_to_restore = []
         self.game_over = False
         self.blinky = {
+            "name": "blinky",
             "coordinates": self.get_ghost_coordinates(),
             "left_spawn": False
         }
+        self.pinky = {
+            "name": "pinky",
+            "coordinates": None,
+            "left_spawn": False,
+            "spawned": False
+            }
+        self.inky = {
+            "name": "inky",
+            "coordinates": None,
+            "left_spawn": False,
+            "spawned": False  
+            }
+        self.clyde = {
+            "name": "clyde",
+            "coordinates": None,
+            "left_spawn": False,
+            "spawned": False
+            }
         self.pacman = self.get_pacman_coordinates()
         
         # Stores the number of lives left for pacman. Still need to configure this. 
@@ -96,6 +140,23 @@ class PacmanEnv(gym.Env):
         pacman_policy_net = DQN(n_actions).to(device)
         load_execution(pacman_policy_net, only_policy_net=True, dirpath="")
         return pacman_policy_net
+
+    # This function duplicates the last ghost, and assigns it to a ghost that hasn't spawned 
+    def duplicate_ghost(self, old_ghost):
+        coordinates = np.copy(old_ghost["coordinates"])
+
+        if old_ghost["name"] == "blinky":
+            self.pinky["coordinates"] = coordinates
+
+        if old_ghost["name"] == "pinky":
+            self.inky["coordinates"] = coordinates
+
+        if old_ghost["name"] == "inky":
+            self.clyde["coordinates"] = coordinates
+            
+        for coordinate in coordinates:
+            self.grid[coordinate[0], coordinate[1]] = 183
+
 
     # This function is used to get blinky's position at the beginning of the game 
     # Note that it can only be used at the beginning since power pellets are the same color as blinky,
@@ -161,7 +222,25 @@ class PacmanEnv(gym.Env):
                 self.grid[coordinate[0], coordinate[1]] = 192
             else:
                 self.pips_to_restore.append(coordinate)
+        
+        # Increment the spawn counter
+        self.spawn_counter += 1
+
+        # Determine if ghosts should be spawned in
+        # If they should, duplicate the last ghost. 
+
+        if self.spawn_counter > 20 and not self.pinky["spawned"]:
+            self.duplicate_ghost(self.blinky)
+            self.pinky["spawned"] = True
+        if self.spawn_counter > 30 and not self.inky["spawned"]:
+            self.duplicate_ghost(self.pinky)
+            self.inky["spawned"] = True
+        if self.spawn_counter > 40 and not self.clyde["spawned"]:
+            self.duplicate_ghost(self.inky)
+            self.clyde["spawned"] = True
+
         self.render()
+
         # Return a reward of 10 if the ghost caught pacman, and -1 otherwise 
         if self.game_over:
             return 10
