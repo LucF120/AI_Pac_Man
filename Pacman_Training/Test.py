@@ -25,7 +25,7 @@ n_actions = env.action_space.n
 policy_net = DQN(n_actions).to(device)
 
 # This always loads from the previous_run/ folder. Make sure the policy_net.pth file is located here. 
-load_execution(policy_net)
+load_execution(policy_net, only_policy_net=True)
 
 def select_action(state):
     return policy_net(state).max(1).indices.view(1, 1)
