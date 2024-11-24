@@ -61,7 +61,7 @@ TAU = 0.005
 LR = 1e-5
 REPLAY_MEMORY_CAPACITY = 10000
 
-num_episodes = 1000
+num_episodes = 10000
 # This decides how many episodes until running save_execution() 
 save_rate = 100
 
@@ -166,10 +166,10 @@ for i_episode in range(num_episodes):
         end_episode = False
         current_frame = info['episode_frame_number']
         # Ignore the first 140 frames, since the game hasn't started yet 
-        # Also, only choose an action every 4th frame
         #If Pacman previously died, wait 128 frames after they lost a life 
-        if current_frame < 160 or current_frame % 4 != 0:
-            action = previous_action 
+        if current_frame < 160:
+            observation, reward, terminated, truncated, info = env.step(previous_action)
+            continue
         else:
             action = select_action(state)
         observation, reward, terminated, truncated, info = env.step(action.item())
@@ -177,21 +177,26 @@ for i_episode in range(num_episodes):
         #Crop out the score, and blank space at the top of the game 
         observation = observation[20:200, 0:]
         
+        if reward > 0:
+            reward = 1
+
         # # Manually change the reward to -100 if pacman lost a life
         if info['lives'] < num_lives:
-            reward = -100
+            reward = -1
             # Set the frame to wait until to 128 greater than now, since this is roughly how long it takes for pacman to respawn 
-            end_episode = True
+            # end_episode = True
         done = terminated or truncated
 
         if terminated:
             next_state = None
-            # Set the reward to -100 if pacman loses
-            if info['lives'] == 0:
-                reward = -500
-            else:
-                # If pacman wins, give a huge reward
-                reward = 100000
+            # # Set the reward to -100 if pacman loses
+            # if info['lives'] == 0:
+            #     reward = -500
+            # else:
+            #     # If pacman wins, give a huge reward
+            #     reward = 100000
+            if info['lives'] > 0:
+                reward = 100
         else:
             next_state = torch.tensor(observation, dtype=torch.float32, device=device).unsqueeze(0) / 255.0
             next_state = next_state.unsqueeze(0)
@@ -221,6 +226,11 @@ for i_episode in range(num_episodes):
         state = next_state
     print(f"Episode {i_episode} training loss: {running_loss}.          Total Reward: {total_reward}")
     total_rewards.append(total_reward)
+
+    epsilon = EPS_END + (EPS_START - EPS_END) * \
+        math.exp(-1. * steps_done / EPS_DECAY)
+    print(f"Steps done: {steps_done}        Epsilon: {epsilon}")
+
 
 # One final save before terminating 
 save_execution(target_net.state_dict(), policy_net.state_dict(), memory, BATCH_SIZE, GAMMA, EPS_START, EPS_END, EPS_DECAY, TAU, LR, steps_done, total_rewards, REPLAY_MEMORY_CAPACITY)
