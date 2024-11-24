@@ -18,15 +18,21 @@ device = torch.device(
 # Create the Pacman environment
 env = PacmanEnv()
 # Uncomment to have a display
-# env = PacmanEnv(render_mode="human")
+env = PacmanEnv(render_mode="human")
 
 observation, info = env.reset()
 total_reward = 0
 num_steps = 0
 while True:
     num_steps += 1
-    observation, reward, game_over = env.step(env.ghost_action_space.sample())
+    blinky_action = env.ghost_action_space.sample()
+    pinky_action = env.ghost_action_space.sample()
+    inky_action = env.ghost_action_space.sample()
+    clyde_action = env.ghost_action_space.sample()
+    actions = (blinky_action, pinky_action, inky_action, clyde_action)
+    observation, reward, game_over = env.step(actions)
     total_reward += reward 
+    print(f"STEP: {num_steps}")
     if game_over:
         print(f"GAME OVER.   Total Reward: {total_reward}       Num Steps: {num_steps}")
         observation, info = env.reset()

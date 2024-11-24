@@ -112,12 +112,17 @@ class PacmanEnv(gym.Env):
         self.info = []
         return [self.grid, self.info]
 
-    def step(self, action):
+    # Note: actions is a tuple of size 4.
+    # index 1 is blinky's move
+    # index 2 is pinky's move
+    # index 3 is inky's move
+    # index 4 is clyde's move
+    def step(self, actions):
         """Apply an action and return the new state, reward, and done status."""
         # Taking random pacman action for now. Will incorporate the neural network policy soon. 
         pacman_action = self.select_pacman_action()
         self.move_pacman(pacman_action)
-        reward = self.move_blinky(action)
+        reward = self.move_all_ghosts(actions)
         return [self.grid, reward, self.game_over]
 
     def render(self):
@@ -168,9 +173,54 @@ class PacmanEnv(gym.Env):
         ]
         return filtered_coordinates
 
+    # This function is used by step.
+    # It takes in a tuple of 4 actions, and uses them on all 4 ghosts 
+    def move_all_ghosts(self, actions):
+        reward = 0
+        reward += self.move_blinky(actions[0])
+
+        if self.pinky["spawned"]:
+            reward += self.move_pinky(actions[1])
+        if self.inky["spawned"]:
+            reward += self.move_inky(actions[2])
+        if self.clyde["spawned"]:
+            reward += self.move_clyde(actions[3])
+
+        # Increment the spawn counter
+        self.spawn_counter += 1
+
+        # Determine if ghosts should be spawned in
+        # If they should, duplicate the last ghost. 
+
+        if self.spawn_counter > 20 and not self.pinky["spawned"]:
+            self.duplicate_ghost(self.blinky)
+            self.pinky["spawned"] = True
+        if self.spawn_counter > 30 and not self.inky["spawned"]:
+            self.duplicate_ghost(self.pinky)
+            self.inky["spawned"] = True
+        if self.spawn_counter > 40 and not self.clyde["spawned"]:
+            self.duplicate_ghost(self.inky)
+            self.clyde["spawned"] = True
+
+        self.render()
+        return reward 
+
+        
     # This function is used to move blinky, by calling the move_ghost function
     def move_blinky(self, action):
         return self.move_ghost(self.blinky, action)
+    
+    # This function is used to move pinky, by calling the move_ghost function
+    def move_pinky(self, action):
+        return self.move_ghost(self.pinky, action)
+    
+    # This function is used to move inky, by calling the move_ghost function
+    def move_inky(self, action):
+        return self.move_ghost(self.inky, action)
+    
+    # This function is used to move clyde, by calling the move_ghost function
+    def move_clyde(self, action):
+        return self.move_ghost(self.clyde, action)
 
     # This function is used to move a ghost up, down, left, or right
     # It takes in a ghost as input, since there are 4 different ghosts. 
@@ -222,30 +272,12 @@ class PacmanEnv(gym.Env):
                 self.grid[coordinate[0], coordinate[1]] = 192
             else:
                 self.pips_to_restore.append(coordinate)
-        
-        # Increment the spawn counter
-        self.spawn_counter += 1
-
-        # Determine if ghosts should be spawned in
-        # If they should, duplicate the last ghost. 
-
-        if self.spawn_counter > 20 and not self.pinky["spawned"]:
-            self.duplicate_ghost(self.blinky)
-            self.pinky["spawned"] = True
-        if self.spawn_counter > 30 and not self.inky["spawned"]:
-            self.duplicate_ghost(self.pinky)
-            self.inky["spawned"] = True
-        if self.spawn_counter > 40 and not self.clyde["spawned"]:
-            self.duplicate_ghost(self.inky)
-            self.clyde["spawned"] = True
-
-        self.render()
 
         # Return a reward of 10 if the ghost caught pacman, and -1 otherwise 
         if self.game_over:
             return 10
         else:
-            return -0.01
+            return -0.001
         
     # Helper function for move_ghost 
     def move_ghost_left(self, ghost):
