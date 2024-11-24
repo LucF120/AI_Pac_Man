@@ -146,8 +146,17 @@ for i_episode in range(1000):
         optimizer.step()
 
 
-        probabilities = [torch.softmax(outputs[i:i+4], dim=0) for i in range(0, 16, 4)]
-        print(probabilities)
+        # Get the probabilities for each ghost using softmax
+        blinky_probs = torch.softmax(outputs[0:4], dim=0)  # Probabilities for Blinky's actions
+        pinky_probs = torch.softmax(outputs[4:8], dim=0)   # Probabilities for Pinky's actions
+        inky_probs = torch.softmax(outputs[8:12], dim=0)   # Probabilities for Inky's actions
+        clyde_probs = torch.softmax(outputs[12:16], dim=0) # Probabilities for Clyde's actions
+
+        # Get the predicted action (the index with the highest probability) for each ghost
+        blinky_predicted_action = torch.argmax(blinky_probs).item()
+        pinky_predicted_action = torch.argmax(pinky_probs).item()
+        inky_predicted_action = torch.argmax(inky_probs).item()
+        clyde_predicted_action = torch.argmax(clyde_probs).item()        
 
         if np.random.rand() < epsilon:
             # Randomly select an action for exploration
@@ -159,7 +168,7 @@ for i_episode in range(1000):
             predicted_actions = (predicted_action1, predicted_action2, predicted_action3, predicted_action4)
         else:
             # Otherwise, use the model's prediction
-            predicted_actions = (probabilities[0], probabilities[1], probabilities[2], probabilities[3])
+            predicted_actions = (blinky_predicted_action, pinky_predicted_action, inky_predicted_action, clyde_predicted_action)
 
         observation, reward, game_over = env.step(predicted_actions)
         total_reward += reward 
