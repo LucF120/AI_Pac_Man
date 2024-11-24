@@ -19,6 +19,9 @@ for i in range(0, 114):
     observation2 = observation2[20:200, 0:]
 cv2.imshow('Move', observation2)
 
+observation3, reward, terminated, truncated, info = env.step(2)
+cv2.imshow('Move3', observation3)
+
 cv2.waitKey(0)  # Wait for a key press to close the window
 cv2.destroyAllWindows()
 
