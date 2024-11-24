@@ -30,7 +30,7 @@ def select_action(state):
 # # Test environment
 # env.render()
 
-# #Test moving right
+# # Test moving right
 # for i in range(20):
 #     env.move_pacman(2)
 
@@ -51,6 +51,12 @@ def select_action(state):
 # for i in range(20):
 #     env.move_pacman(4)
 
+# for i in range(100):
+#     env.move_pacman(env.pacman_action_space.sample())
+
+# for i in range(1000):
+#     env.move_blinky(env.ghost_action_space.sample())
+
 state = env.grid 
 env.render()
 #Test random movements
@@ -59,6 +65,7 @@ for i in range(100):
     state = state.unsqueeze(1)
     action = select_action(state)
     print(f"Action: {action.item()}")
+    env.move_blinky(env.ghost_action_space.sample())
     env.move_pacman(action.item())
     env.render()
     state = env.grid 
