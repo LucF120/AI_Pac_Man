@@ -203,6 +203,8 @@ class PacmanEnv(gym.Env):
             self.clyde["spawned"] = True
 
         self.render()
+        if self.game_over:
+            reward += 10
         return reward 
 
         
@@ -275,9 +277,9 @@ class PacmanEnv(gym.Env):
 
         # Return a reward of 10 if the ghost caught pacman, and -1 otherwise 
         if self.game_over:
-            return 10
+            return 0
         else:
-            return -0.001
+            return -0.01
         
     # Helper function for move_ghost 
     def move_ghost_left(self, ghost):
