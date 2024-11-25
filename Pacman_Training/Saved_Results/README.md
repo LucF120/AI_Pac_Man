@@ -104,7 +104,7 @@ For this run, the following parameters were used:
 <img src="14/Rewards_Plot.png" width="500" height="500">
 
 <br>
-<h3>Attempt 15 (Best Run So Far)</h3>
+<h3>Attempt 15</h3>
 <ol>
     <li>BATCH_SIZE = 64</li>
     <li>GAMMA = 0.99</li>
@@ -127,3 +127,25 @@ For this run, the following parameters were used:
     <li>Changed the reward for eating a ghost from 20 to 100</li>
 </ol>
 <img src="16/Rewards_Plot.png" width="500" height="500">
+
+<h3>Attempt 17</h3>
+<ol>
+    <li>Same as 16, but added back the 140 frame wait at the beginning of the episode</li>
+    <li>Also, switched back to only 1 life per episode</li>
+</ol>
+<img src="17/Rewards_Plot.png" width="500" height="500">
+
+<h3>Attempt 18 (Best run so far)</h3>
+<ol>
+    <li>Switched back to using all 4 lives for the training</li>
+    <li>Most important change: normalized rewards to be between -1 and 1. This had a DRAMATIC positive effect on the training.</li>
+    <li>BATCH_SIZE = 64</li>
+    <li>GAMMA = 0.99</li>
+    <li>EPS_START = 1</li>
+    <li>EPS_END = 0.01</li>
+    <li>EPS_DECAY = 40000</li> 
+    <li>TAU = 0.005</li>
+    <li>LR = 1e-5</li>
+    <li>REPLAY_MEMORY_CAPACITY = 10000</li>
+</ol>
+<img src="18/Rewards_Plot.png" width="500" height="500">
