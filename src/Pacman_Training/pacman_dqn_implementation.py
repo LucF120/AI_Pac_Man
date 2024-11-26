@@ -162,12 +162,13 @@ for i_episode in range(num_episodes):
     total_reward = 0
     previous_action = select_action(state)
     num_lives = info['lives']
+    wait_until_frame = 0
     for t in count():
         end_episode = False
         current_frame = info['episode_frame_number']
         # Ignore the first 140 frames, since the game hasn't started yet 
         #If Pacman previously died, wait 128 frames after they lost a life 
-        if current_frame < 160:
+        if current_frame < 110 or current_frame < wait_until_frame:
             observation, reward, terminated, truncated, info = env.step(previous_action)
             continue
         else:
@@ -183,6 +184,7 @@ for i_episode in range(num_episodes):
         # # Manually change the reward to -100 if pacman lost a life
         if info['lives'] < num_lives:
             reward = -1
+            wait_until_frame = current_frame + 110
             # Set the frame to wait until to 128 greater than now, since this is roughly how long it takes for pacman to respawn 
             # end_episode = True
         done = terminated or truncated
