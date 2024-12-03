@@ -25,7 +25,7 @@ device = torch.device(
 )
 
 # Create the Pacman environment
-env = PacmanEnv(render_mode="human")
+env = PacmanEnv()
 
 epsilon = 0.99
 epsilon_decay_rate = 0.99999
