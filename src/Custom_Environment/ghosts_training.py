@@ -13,16 +13,17 @@ from Pacman_reload_dqn import load_execution
 from pacman_neural_network import DQN
 from custom_pacman_env import PacmanEnv 
 
-
-ghost_nn = GhostFNN()
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(ghost_nn.parameters(), lr=0.01)
-
 device = torch.device(
     "cuda" if torch.cuda.is_available() else
     "mps" if torch.backends.mps.is_available() else
     "cpu"
 )
+
+ghost_nn = GhostFNN().to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(ghost_nn.parameters(), lr=0.01)
+
+
 
 # Create the Pacman environment
 env = PacmanEnv()
@@ -64,7 +65,7 @@ for i_episode in range(100):
             clyde_coordinates[1] / 180.0, 
             pacman_coordinates[0] / 160.0, 
             pacman_coordinates[1] /180.0])
-        inputs = torch.tensor(inputs, dtype=torch.float)
+        inputs = torch.tensor(inputs, dtype=torch.float, device=device)
 
 
         # Got help from GenAI to figure out how to pass in the target action 
@@ -136,10 +137,10 @@ for i_episode in range(100):
         inky_output = outputs[8:12]  # Next 4 values correspond to Inky's actions
         clyde_output = outputs[12:16] # Last 4 values correspond to Clyde's actions
 
-        blinky_loss = criterion(blinky_output.unsqueeze(0), torch.tensor([blinky_target_action], dtype=torch.long))
-        pinky_loss = criterion(pinky_output.unsqueeze(0), torch.tensor([pinky_target_action], dtype=torch.long))
-        inky_loss = criterion(inky_output.unsqueeze(0), torch.tensor([inky_target_action], dtype=torch.long))
-        clyde_loss = criterion(clyde_output.unsqueeze(0), torch.tensor([clyde_target_action], dtype=torch.long))
+        blinky_loss = criterion(blinky_output.unsqueeze(0), torch.tensor([blinky_target_action], dtype=torch.long, device=device))
+        pinky_loss = criterion(pinky_output.unsqueeze(0), torch.tensor([pinky_target_action], dtype=torch.long, device=device))
+        inky_loss = criterion(inky_output.unsqueeze(0), torch.tensor([inky_target_action], dtype=torch.long, device=device))
+        clyde_loss = criterion(clyde_output.unsqueeze(0), torch.tensor([clyde_target_action], dtype=torch.long, device=device))
 
 
         loss = blinky_loss + pinky_loss + inky_loss + clyde_loss
