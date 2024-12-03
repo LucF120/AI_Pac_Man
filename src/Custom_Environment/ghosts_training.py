@@ -19,6 +19,7 @@ device = torch.device(
     "cpu"
 )
 
+print("Training with the following device: ", device)
 ghost_nn = GhostFNN().to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(ghost_nn.parameters(), lr=0.01)
@@ -29,7 +30,7 @@ optimizer = optim.Adam(ghost_nn.parameters(), lr=0.01)
 env = PacmanEnv()
 
 epsilon = 0.99
-epsilon_decay_rate = 0.99999
+epsilon_decay_rate = 0.9999
 # Training loop
 total_rewards = []
 for i_episode in range(100):
@@ -147,25 +148,42 @@ for i_episode in range(100):
         loss.backward()
         optimizer.step()
 
+        blinky_valid_actions = env.get_legal_moves(env.blinky)
+        pinky_valid_actions = env.get_legal_moves(env.pinky)
+        inky_valid_actions = env.get_legal_moves(env.inky)
+        clyde_valid_actions = env.get_legal_moves(env.clyde)
 
         # Get the probabilities for each ghost using softmax
-        blinky_probs = torch.softmax(outputs[0:4], dim=0)  # Probabilities for Blinky's actions
-        pinky_probs = torch.softmax(outputs[4:8], dim=0)   # Probabilities for Pinky's actions
-        inky_probs = torch.softmax(outputs[8:12], dim=0)   # Probabilities for Inky's actions
-        clyde_probs = torch.softmax(outputs[12:16], dim=0) # Probabilities for Clyde's actions
+        blinky_probs = torch.argsort(torch.softmax(outputs[0:4], dim=0), descending=True)  # Probabilities for Blinky's actions
+        pinky_probs = torch.argsort(torch.softmax(outputs[4:8], dim=0), descending=True)   # Probabilities for Pinky's actions
+        inky_probs = torch.argsort(torch.softmax(outputs[8:12], dim=0), descending=True)   # Probabilities for Inky's actions
+        clyde_probs = torch.argsort(torch.softmax(outputs[12:16], dim=0), descending=True) # Probabilities for Clyde's actions
 
         # Get the predicted action (the index with the highest probability) for each ghost
-        blinky_predicted_action = torch.argmax(blinky_probs).item()
-        pinky_predicted_action = torch.argmax(pinky_probs).item()
-        inky_predicted_action = torch.argmax(inky_probs).item()
-        clyde_predicted_action = torch.argmax(clyde_probs).item()        
+        # Makes sure that the action chosen is legal 
+        for action in blinky_probs:
+            if action.item() in blinky_valid_actions:
+                blinky_predicted_action = action.item()
+                break
+        for action in pinky_probs:
+            if action.item() in pinky_valid_actions:
+                pinky_predicted_action = action.item()
+                break
+        for action in inky_probs:
+            if action.item() in inky_valid_actions:
+                inky_predicted_action = action.item()
+                break
+        for action in clyde_probs:
+            if action.item() in clyde_valid_actions:
+                clyde_predicted_action = action.item()
+                break
 
         if np.random.rand() < epsilon:
             # Randomly select an action for exploration
-            predicted_action1 = np.random.choice([0, 1, 2, 3])
-            predicted_action2 = np.random.choice([0, 1, 2, 3])
-            predicted_action3 = np.random.choice([0, 1, 2, 3])
-            predicted_action4 = np.random.choice([0, 1, 2, 3])
+            predicted_action1 = np.random.choice(np.array(blinky_valid_actions))
+            predicted_action2 = np.random.choice(np.array(pinky_valid_actions))
+            predicted_action3 = np.random.choice(np.array(inky_valid_actions))
+            predicted_action4 = np.random.choice(np.array(clyde_valid_actions))
 
             predicted_actions = (predicted_action1, predicted_action2, predicted_action3, predicted_action4)
         else:
