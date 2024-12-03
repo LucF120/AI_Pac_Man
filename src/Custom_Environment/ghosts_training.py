@@ -30,10 +30,10 @@ optimizer = optim.Adam(ghost_nn.parameters(), lr=0.01)
 env = PacmanEnv()
 
 epsilon = 0.99
-epsilon_decay_rate = 0.9999
+epsilon_decay_rate = 0.999999
 # Training loop
 total_rewards = []
-for i_episode in range(100):
+for i_episode in range(10000):
     observation, info = env.reset() 
     total_reward = 0
     step_count = 0
@@ -195,10 +195,19 @@ for i_episode in range(100):
         epsilon = epsilon * epsilon_decay_rate
         if game_over:
             break
-
+        
 
     print(f"Episode {i_episode},    Step count: {step_count},       Loss: {loss.item()},   Total Reward: {total_reward}     Epsilon: {epsilon}")
     total_rewards.append(total_reward)
+    if i_episode % 100 == 0:
+        plt.figure()
+        plt.plot(range(1, len(total_rewards)+1), total_rewards, label="Total Reward vs Episode #")
+        plt.xlabel('Episode')
+        plt.ylabel('Total Reward')
+        plt.legend()
+        plt.savefig('ghosts_training.png', dpi=300, bbox_inches='tight')
+        print(f"Saved up to episode {i_episode}")
+
 
 print("Training complete!")
 plt.figure()
