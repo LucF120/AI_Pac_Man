@@ -245,7 +245,7 @@ class PacmanEnv(gym.Env):
     def move_ghost(self, ghost, action):
         # If the ghost hasn't left the spawn, set the num_steps to 22 to leave spawn in one go 
         if ghost["left_spawn"]:
-            num_steps = 1
+            num_steps = 12
         else:
             num_steps = 22
 
