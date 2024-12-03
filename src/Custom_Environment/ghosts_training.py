@@ -5,6 +5,7 @@ import torch.optim as optim
 import sys
 import os 
 import numpy as np
+import matplotlib.pyplot as plt 
 
 sys.path.append(os.path.abspath("../Pacman_Training"))
 
@@ -24,13 +25,13 @@ device = torch.device(
 )
 
 # Create the Pacman environment
-env = PacmanEnv()
+env = PacmanEnv(render_mode="human")
 
 epsilon = 0.99
-epsilon_decay_rate = 0.999999
+epsilon_decay_rate = 0.99999
 # Training loop
 total_rewards = []
-for i_episode in range(1000):
+for i_episode in range(100):
     observation, info = env.reset() 
     total_reward = 0
     step_count = 0
@@ -181,4 +182,9 @@ for i_episode in range(1000):
     total_rewards.append(total_reward)
 
 print("Training complete!")
-
+plt.figure()
+plt.plot(range(1, len(total_rewards)+1), total_rewards, label="Total Reward vs Episode #")
+plt.xlabel('Episode')
+plt.ylabel('Total Reward')
+plt.legend()
+plt.savefig('ghosts_training.png', dpi=300, bbox_inches='tight')

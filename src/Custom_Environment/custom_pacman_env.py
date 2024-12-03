@@ -51,19 +51,19 @@ class PacmanEnv(gym.Env):
         self.pinky = {
             "name": "pinky",
             "coordinates": None,
-            "left_spawn": False,
+            "left_spawn": True,
             "spawned": False
             }
         self.inky = {
             "name": "inky",
             "coordinates": None,
-            "left_spawn": False,
+            "left_spawn": True,
             "spawned": False  
             }
         self.clyde = {
             "name": "clyde",
             "coordinates": None,
-            "left_spawn": False,
+            "left_spawn": True,
             "spawned": False
             }
         
@@ -91,19 +91,19 @@ class PacmanEnv(gym.Env):
         self.pinky = {
             "name": "pinky",
             "coordinates": None,
-            "left_spawn": False,
+            "left_spawn": True,
             "spawned": False
             }
         self.inky = {
             "name": "inky",
             "coordinates": None,
-            "left_spawn": False,
+            "left_spawn": True,
             "spawned": False  
             }
         self.clyde = {
             "name": "clyde",
             "coordinates": None,
-            "left_spawn": False,
+            "left_spawn": True,
             "spawned": False
             }
         self.pacman = self.get_pacman_coordinates()
@@ -243,31 +243,40 @@ class PacmanEnv(gym.Env):
     # - Add the pips that need to be restored to self.pips_to_restore (which will be used in move_ghost()
     # - Renders the grid 
     def move_ghost(self, ghost, action):
+        # If the ghost hasn't left the spawn, set the num_steps to 22 to leave spawn in one go 
+        if ghost["left_spawn"]:
+            num_steps = 1
+        else:
+            num_steps = 22
+
         # 0 = UP 
         if action == 0:
-            for i in range(10):
+            for i in range(num_steps):
                 if self.game_over:
                     break
                 self.move_ghost_up(ghost)
         # 1 = Right 
         if action == 1:
-            for i in range(6):
+            for i in range(num_steps):
                 if self.game_over:
                     break
                 self.move_ghost_right(ghost)
         # 2 = Left
         if action == 2:
-            for i in range(6):
+            for i in range(num_steps):
                 if self.game_over:
                     break
                 self.move_ghost_left(ghost)
         # 3 = Down 
         if action == 3:
-            for i in range(10):
+            for i in range(num_steps):
                 if self.game_over:
                     break
                 self.move_ghost_down(ghost)
         
+        # Now that the ghost is definitely not in spawn, set left_spawn flag to True 
+        ghost["left_spawn"] = True
+
         # Restore pips that the ghost deleted previously 
         for i in range(len(self.pips_to_restore) - 1, -1, -1): 
             coordinate = self.pips_to_restore.pop(i)
@@ -286,7 +295,6 @@ class PacmanEnv(gym.Env):
     def move_ghost_left(self, ghost):
         updated_grid = np.copy(self.grid)
         new_ghost_coordinates = []
-        left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1]):
             # Check if attempted movement is out of bounds
@@ -297,24 +305,18 @@ class PacmanEnv(gym.Env):
                 self.game_over = True
             # Checks if the ghost is colliding with a wall only if they haven't left spawn yet 
             if updated_grid[coordinate[0], coordinate[1] - 1] == 192:
-                if not self.is_valid_pip_location(coordinate[1] - 1, coordinate[0]) and ghost["left_spawn"] == True:
+                if not self.is_valid_pip_location(coordinate[1] - 1, coordinate[0]) and ghost["left_spawn"]:
                     return
                 # If the ghost collided with a pixel that is the same color as a wall/pellet legally, add it to pips_to_restore
                 # to fix the grid after the ghost is finished moving 
                 else:
                     pips_to_restore.append([coordinate[0], coordinate[1] - 1])
-            # Checks if the coordinate is in the spawn. If it is, it sets left_spawn to false. 
-            if self.coord_in_spawn(coordinate[1], coordinate[0]):
-                left_spawn = False
             updated_grid[coordinate[0], coordinate[1]] = 64
             updated_grid[coordinate[0], coordinate[1] - 1] = 183
             new_ghost_coordinates.append([coordinate[0], coordinate[1] - 1])
         # Update the grid after ghost moved left 
         self.grid = updated_grid
         ghost["coordinates"] = new_ghost_coordinates
-        # If the ghost left the spawn, set it to true
-        if left_spawn:
-            ghost["left_spawn"] = True
         self.pips_to_restore.extend(pips_to_restore)
         self.render()
 
@@ -322,7 +324,6 @@ class PacmanEnv(gym.Env):
     def move_ghost_right(self, ghost):
         updated_grid = np.copy(self.grid)
         new_ghost_coordinates = []
-        left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1], reverse=True):
             # Check if attempted movement is out of bounds
@@ -333,21 +334,16 @@ class PacmanEnv(gym.Env):
                 self.game_over = True
 
             if updated_grid[coordinate[0], coordinate[1] + 1] == 192:
-                if not self.is_valid_pip_location(coordinate[1] + 1, coordinate[0]) and ghost["left_spawn"] == True:
+                if not self.is_valid_pip_location(coordinate[1] + 1, coordinate[0]) and ghost["left_spawn"]:
                     return
                 else:
                     pips_to_restore.append([coordinate[0], coordinate[1] + 1])
-            # Checks if the coordinate is in the spawn. If it is, it sets left_spawn to false. 
-            if self.coord_in_spawn(coordinate[1], coordinate[0]):
-                left_spawn = False
             updated_grid[coordinate[0], coordinate[1]] = 64
             updated_grid[coordinate[0], coordinate[1] + 1] = 183
             new_ghost_coordinates.append([coordinate[0], coordinate[1] + 1])
         # Update the grid after pacman moved right 
         self.grid = updated_grid
         ghost["coordinates"] = new_ghost_coordinates
-        if left_spawn:
-            ghost["left_spawn"] = True
         self.pips_to_restore.extend(pips_to_restore)
         self.render()
 
@@ -355,7 +351,6 @@ class PacmanEnv(gym.Env):
     def move_ghost_up(self, ghost):
         updated_grid = np.copy(self.grid)
         new_ghost_coordinates = []
-        left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[0]):
             # Check if attempted movement is out of bounds
@@ -366,22 +361,16 @@ class PacmanEnv(gym.Env):
                 self.game_over = True
 
             if updated_grid[coordinate[0] - 1, coordinate[1]] == 192:
-                if not self.is_valid_pip_location(coordinate[1], coordinate[0] - 1) and ghost["left_spawn"] == True:
+                if not self.is_valid_pip_location(coordinate[1], coordinate[0] - 1) and ghost["left_spawn"]:
                     return
                 else:
                     pips_to_restore.append([coordinate[0] - 1, coordinate[1]])
-            # Checks if the coordinate is in the spawn. If it is, it sets left_spawn to false. 
-            else:
-                if self.coord_in_spawn(coordinate[1], coordinate[0]):
-                    left_spawn = False
             updated_grid[coordinate[0], coordinate[1]] = 64
             updated_grid[coordinate[0] - 1, coordinate[1]] = 183
             new_ghost_coordinates.append([coordinate[0] - 1, coordinate[1]])
         # Update the grid after pacman moved up 
         self.grid = updated_grid
         ghost["coordinates"] = new_ghost_coordinates
-        if left_spawn:
-            ghost["left_spawn"] = True
         self.pips_to_restore.extend(pips_to_restore)
         self.render()
     
@@ -389,7 +378,6 @@ class PacmanEnv(gym.Env):
     def move_ghost_down(self, ghost):
         updated_grid = np.copy(self.grid)
         new_ghost_coordinates = []
-        left_spawn = True
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[0], reverse=True):
             # Check if attempted movement is out of bounds
@@ -400,23 +388,17 @@ class PacmanEnv(gym.Env):
                 self.game_over = True
 
             if updated_grid[coordinate[0] + 1, coordinate[1]] == 192:
-                if not self.is_valid_pip_location(coordinate[1], coordinate[0] + 1) and ghost["left_spawn"] == True:
+                if not self.is_valid_pip_location(coordinate[1], coordinate[0] + 1) and ghost["left_spawn"]:
                     # Return if the move is not legal 
                     return
                 else:
                     pips_to_restore.append([coordinate[0] + 1, coordinate[1]])
-            # Checks if the coordinate is in the spawn. If it is, it sets left_spawn to false. 
-            else:
-                if self.coord_in_spawn(coordinate[1], coordinate[0]):
-                    left_spawn = False
             updated_grid[coordinate[0], coordinate[1]] = 64
             updated_grid[coordinate[0] + 1, coordinate[1]] = 183
             new_ghost_coordinates.append([coordinate[0] + 1, coordinate[1]])
         # Update the grid after pacman moved down 
         self.grid = updated_grid
         ghost["coordinates"] = new_ghost_coordinates
-        if left_spawn:
-            ghost["left_spawn"] = True
         self.pips_to_restore.extend(pips_to_restore)
         self.render()
 
