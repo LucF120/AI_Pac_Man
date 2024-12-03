@@ -16,9 +16,9 @@ device = torch.device(
 )
 
 # Create the Pacman environment
-env = PacmanEnv()
+#env = PacmanEnv()
 # Uncomment to have a display
-# env = PacmanEnv(render_mode="human")
+env = PacmanEnv(render_mode="human")
 
 observation, info = env.reset()
 total_reward = 0
