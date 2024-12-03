@@ -46,7 +46,8 @@ class PacmanEnv(gym.Env):
         self.blinky = {
             "name": "blinky",
             "coordinates": self.get_ghost_coordinates(),
-            "left_spawn": False
+            "left_spawn": False,
+            "spawned": True
             }
         self.pinky = {
             "name": "pinky",
@@ -86,7 +87,8 @@ class PacmanEnv(gym.Env):
         self.blinky = {
             "name": "blinky",
             "coordinates": self.get_ghost_coordinates(),
-            "left_spawn": False
+            "left_spawn": False,
+            "spawned": True
         }
         self.pinky = {
             "name": "pinky",
@@ -245,7 +247,7 @@ class PacmanEnv(gym.Env):
     def move_ghost(self, ghost, action):
         # If the ghost hasn't left the spawn, set the num_steps to 22 to leave spawn in one go 
         if ghost["left_spawn"]:
-            num_steps = 12
+            num_steps = 11
         else:
             num_steps = 22
 
@@ -290,7 +292,56 @@ class PacmanEnv(gym.Env):
             return 0
         else:
             return -0.01
+    
+    # Helper function to see if a ghost can make a certain action  
+    def is_move_legal(self, ghost, action):
+        updated_grid = np.copy(self.grid)
+        # 0 = Up 
+        if action == 0:
+            x = 0
+            y = -1 
+        # 1 = Right 
+        if action == 1:
+            x = 1
+            y = 0
+        # 2 = Left
+        if action == 2:
+            x = -1
+            y = 0
+        # 3 = Down 
+        if action == 3:
+            x = 0
+            y = 1 
+
+        for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1]):
+
+            # Check if attempted movement is out of bounds
+            if action == 0 and coordinate[0] - 1 <= 0:
+                return False
+            if action == 3 and coordinate[0] + 1 >= self.height:
+                return False
+            if action == 1 and coordinate[1] + 1 >= self.width:
+                return False
+            if action == 2 and coordinate[1] - 1 <= 0:
+                return False
+                
+            # Checks if the ghost is colliding with a wall only if they haven't left spawn yet 
+            if updated_grid[coordinate[0] + y, coordinate[1] + x] == 192:
+                if not self.is_valid_pip_location(coordinate[1] + x, coordinate[0] + y) and ghost["left_spawn"]:
+                    return False
+        return True
+
+    # Helper function that returns all a ghosts' legal actions 
+    def get_legal_moves(self, ghost):
+        if ghost["spawned"] == False:
+            return [0, 1, 2, 3]
         
+        actions = []
+        for i in range(4):
+            if self.is_move_legal(ghost, i):
+                actions.append(i)
+        return actions
+
     # Helper function for move_ghost 
     def move_ghost_left(self, ghost):
         updated_grid = np.copy(self.grid)
@@ -298,7 +349,7 @@ class PacmanEnv(gym.Env):
         pips_to_restore = []
         for coordinate in sorted(ghost["coordinates"], key=lambda x: x[1]):
             # Check if attempted movement is out of bounds
-            if coordinate[1] -1 <= 0:
+            if coordinate[1] - 1 <= 0:
                 return
             # Checks if the ghost caught pacman
             if updated_grid[coordinate[0], coordinate[1] - 1] == 223:
