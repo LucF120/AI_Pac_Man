@@ -4,10 +4,10 @@ import os
 sys.path.append(os.path.abspath("../Pacman_Training"))
 
 import torch
+import numpy as np 
 
-from Pacman_reload_dqn import load_execution
-from pacman_neural_network import DQN
 from custom_pacman_env import PacmanEnv 
+from ghosts_ffn import GhostFNN
 
 device = torch.device(
     "cuda" if torch.cuda.is_available() else
@@ -20,16 +20,90 @@ device = torch.device(
 # Uncomment to have a display
 env = PacmanEnv(render_mode="human")
 
+#Load the ghosts policy
+ghost_policy_net = GhostFNN().to(device)
+ghost_policy_net.load_state_dict(torch.load(f"previous_run/ghost_policy_net.pth", weights_only=True, map_location=device))
+
+
+# Helper function for getting the inputs for the neural network
+def get_inputs():
+    blinky_coordinates = env.blinky["coordinates"][0]
+    if env.pinky["spawned"]:
+        pinky_coordinates = env.pinky["coordinates"][0]
+    else:
+        pinky_coordinates = [80, 80]
+
+    if env.inky["spawned"]:
+        inky_coordinates = env.inky["coordinates"][0]
+    else:
+        inky_coordinates = [80, 80]
+
+    if env.clyde["spawned"]:
+        clyde_coordinates = env.clyde["coordinates"][0]
+    else:
+        clyde_coordinates = [80, 80]
+    pacman_coordinates = env.pacman[0]
+    inputs = np.array([
+        blinky_coordinates[0] / 160.0, 
+        blinky_coordinates[1] / 180.0, 
+        pinky_coordinates[0] / 160.0, 
+        pinky_coordinates[1] / 180.0, 
+        inky_coordinates[0] / 160.0, 
+        inky_coordinates[1] / 180.0, 
+        clyde_coordinates[0] / 160.0, 
+        clyde_coordinates[1] / 180.0, 
+        pacman_coordinates[0] / 160.0, 
+        pacman_coordinates[1] /180.0])
+    inputs = torch.tensor(inputs, dtype=torch.float, device=device)
+    return inputs
+
+#Function for selecting a ghost action from the policy 
+def select_ghost_action():
+    inputs = get_inputs()
+    outputs = ghost_policy_net(inputs)
+
+    blinky_valid_actions = env.get_legal_moves(env.blinky)
+    pinky_valid_actions = env.get_legal_moves(env.pinky)
+    inky_valid_actions = env.get_legal_moves(env.inky)
+    clyde_valid_actions = env.get_legal_moves(env.clyde)
+
+    blinky_probs = torch.argsort(torch.softmax(outputs[0:4], dim=0), descending=True)  # Probabilities for Blinky's actions
+    pinky_probs = torch.argsort(torch.softmax(outputs[4:8], dim=0), descending=True)   # Probabilities for Pinky's actions
+    inky_probs = torch.argsort(torch.softmax(outputs[8:12], dim=0), descending=True)   # Probabilities for Inky's actions
+    clyde_probs = torch.argsort(torch.softmax(outputs[12:16], dim=0), descending=True) # Probabilities for Clyde's actions
+
+     # Get the predicted action (the index with the highest probability) for each ghost
+    # Makes sure that the action chosen is legal 
+    for action in blinky_probs:
+        if action.item() in blinky_valid_actions:
+            blinky_predicted_action = action.item()
+            break
+    for action in pinky_probs:
+        if action.item() in pinky_valid_actions:
+            pinky_predicted_action = action.item()
+            break
+    for action in inky_probs:
+        if action.item() in inky_valid_actions:
+            inky_predicted_action = action.item()
+            break
+    for action in clyde_probs:
+        if action.item() in clyde_valid_actions:
+            clyde_predicted_action = action.item()
+            break
+
+    return (blinky_predicted_action, pinky_predicted_action, inky_predicted_action, clyde_predicted_action)
+
 observation, info = env.reset()
 total_reward = 0
 num_steps = 0
 while True:
     num_steps += 1
-    blinky_action = env.ghost_action_space.sample()
-    pinky_action = env.ghost_action_space.sample()
-    inky_action = env.ghost_action_space.sample()
-    clyde_action = env.ghost_action_space.sample()
-    actions = (blinky_action, pinky_action, inky_action, clyde_action)
+    # Commented out choosing random actions. Instead will use actions from the ghost policy
+    # blinky_action = env.ghost_action_space.sample()
+    # pinky_action = env.ghost_action_space.sample()
+    # inky_action = env.ghost_action_space.sample()
+    # clyde_action = env.ghost_action_space.sample()
+    actions = select_ghost_action()
     observation, reward, game_over = env.step(actions)
     total_reward += reward 
     if game_over:
@@ -37,6 +111,7 @@ while True:
         observation, info = env.reset()
         num_steps = 0
         total_reward = 0
+        break
 
 
 # n_actions = env.pacman_action_space.n
