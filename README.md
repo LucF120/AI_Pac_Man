@@ -35,18 +35,20 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
 
 2) Navigate to project directory
 
-3) Install required packages:
+3) Install Python version 3.11.5. 
+
+4) Install required packages:
 `pip install -r requirements.txt`
 
-4) Running a saved Pac-Man model:
+5) Running a saved Pac-Man model:
     - Upload saved policy_net.pth to src/Pacman_Training/previous_run, or use the pre-existing src/Pacman_Training/policy_net.pth file.
     - Run src/Pacman_Training/Test.py file
 
-5) Running a saved Ghost model:
+6) Running a saved Ghost model:
     - Upload saved policy_net.pth to src/Custom_Enviornment, or use the pre-existing src/Custom_Environment/policy_net.pth file.
     - Run src/Custom_Enviornment/test_pacman_env.py
 
-6) Generating policy_net.pth files
+7) Generating policy_net.pth files
     - Pacman policies are saved to src/Pacman_Training/previous_run after running src/Pacman_Training/pacman_dqn_implementation.py.
     - Ghost policies are saved to src/Custom_Environment/previous_run after running src/Custom_Enviornment/ghosts_training.py.
 
