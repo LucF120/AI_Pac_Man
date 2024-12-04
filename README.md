@@ -50,7 +50,7 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
 
 7) Generating policy_net.pth files
     - Pacman policies are saved to src/Pacman_Training/previous_run after running src/Pacman_Training/pacman_dqn_implementation.py.
-    - Ghost policies are saved to src/Custom_Environment/previous_run after running src/Custom_Enviornment/ghosts_training.py.
+    - Ghost policies are saved to src/Custom_Environment/previous_run after running src/Custom_Environment/ghosts_training.py.
 
 
 ---
