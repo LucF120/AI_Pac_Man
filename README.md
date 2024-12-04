@@ -30,11 +30,25 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
   - test_pacman_env.py: Test pacman model against ghost model
 ---
 ### Getting Started
-#### Prereqs
-- Python 3.11.5
-- numpy
-- pytorch
-- pickle
+1) Clone the repository:
+`git clone https://github.com/allenyxu2004/CS4100_Pac_Man.git`
+
+2) Navigate to project directory
+
+3) Install required packages:
+`pip install -r requirements.txt`
+
+4) Running a saved Pac-Man model:
+    - Upload saved policy_net.pth to src/Pacman_Training/previous_run
+    - Run src/Pacman_Training/Test.py file
+
+5) Running a saved Ghost model:
+    - Upload saved policy_net.pth to src/Custom_Enviornment
+    - Run src/Custom_Enviornment/test_pacman_env.py
+
+6) Generating policy_net.pth files
+    - Pacman policies can be generated in src/Pacman_Training/pacman_dqn_implementation.py
+    - Ghost policies can be generated in src/Custom_Enviornment/ghosts_training.py
 
 
 ---
