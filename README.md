@@ -8,23 +8,26 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
 ---
 ### Features
 - Pacman AI
-   - In order to train the ghosts, Pacman must be trained first
-   - Utilizes the Pacman ALE enviornment to train with deep RL
-   - Grayscale pixel representation of the enviornment fed into neural network to train Pacman
-   - Ghosts then train off of the Pacman with these specific neural network weights
+   - Trained with double-DQN algorithm and a convolution neural network
+   - Utilizes the pre-existing Pacman ALE enviornment to train with deep RL
+   - Run presaved neural networks against the ghosts
 - Ghost AI
-   - Custom built environment for ghosts to initally train off of Pacman using reinforcement learning
-   - Player can also control Pacman to go against the ghost AI
-   - Ghost AI will adapt to player controls as well
+   - Custom built environment for ghosts to train
+   - Trained using Deep Q-Network algorithm with a feed forward neural network
+   - Run presaved neural networks of the ghosts against Pac-Man
 
 ---
 ### Document Overview
-- Pacman_reload_dqn.py: Saves and loads a state in the RL process
-- pacman.py: Initial RL implementation to train Pacman in the gym enviornment for 10,000 episodes
-- pacman_dqn_implementation.py: DQN implementation of training Pacman
-- pacman_neural_network.py: Defines the Deep Q Network with pytorch
-- view_pacman_gym_env.py: Allows viewing of the enviornment
-
+- Pacman_Training Directory:
+  - Pacman_reload_dqn.py: Saves and loads a state in the RL process
+  - Test.py: Run test games against default ghosts with a saved neural network
+  - pacman_dqn_implementation.py: DQN implementation of training Pacman
+  - pacman_neural_network.py: Defines the Deep Q Network with pytorch
+- Custom_Enviornment Directory:
+  - custom_pacman_env.py: Custom built pacman enviornment to train ghosts
+  - ghosts_ffn.py: Feed forward neural network for ghosts
+  - ghost_training.py: Train ghosts in custom enviornment
+  - test_pacman_env.py: Test pacman model against ghost model
 ---
 ### Getting Started
 #### Prereqs
@@ -37,8 +40,10 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
 ---
 ### Acknowledgements
 This project uses the following libraries and resources:
-- [Pacman ALE Enviornment](https://ale.farama.org/environments/pacman/) for training pacman
--  
+- Farama Foundation. 2024. Arcade Learning Environment: Pac-Man. Available at: https://ale.farama.org/environments/pacman/.
+- FYT3RP4TIL. 2024. Deep Convolutional Q-Learning OpenAI Gymnasium Pac-Man. Available at: https://github.com/FYT3RP4TIL/Deep-Convolutional-Q-Learning-OpenAI-Gymnasium-Pac-Man/blob/main/Deep_Convolutional_Q_Learning_Pac_Man.ipynb.
+- OpenAI. 2024. PyTorch Reinforcement Learning (Q-Learning) Tutorial. Available at: https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html.
+- PacmanCode. 2024. Pacmancode Repository. Available at: https://pacmancode.com/.
 
 
 
