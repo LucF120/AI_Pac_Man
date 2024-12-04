@@ -17,7 +17,7 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
    - Run presaved neural networks of the ghosts against Pac-Man
 
 ---
-### Document Overview
+### Repo Overview
 - src/Pacman_Training Directory:
   - Pacman_reload_dqn.py: Functions for saving/loading the policy network, target network, hyperparameters, and results. 
   - Test.py: Test running a Pac-Man policy against the default ghosts. 
