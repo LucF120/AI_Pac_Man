@@ -1,0 +1,1 @@
+This folder stores generated policy files for the ghosts. 

@@ -206,6 +206,7 @@ for i_episode in range(10000):
         plt.ylabel('Total Reward')
         plt.legend()
         plt.savefig('ghosts_training.png', dpi=300, bbox_inches='tight')
+        torch.save(ghost_nn.state_dict(), 'previous_run/ghost_policy_net.pth')  
         print(f"Saved up to episode {i_episode}")
 
 
