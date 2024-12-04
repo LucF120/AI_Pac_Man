@@ -29,6 +29,38 @@ optimizer = optim.Adam(ghost_nn.parameters(), lr=0.01)
 # Create the Pacman environment
 env = PacmanEnv()
 
+# Helper function for getting the inputs for the neural network
+def get_inputs():
+    blinky_coordinates = env.blinky["coordinates"][0]
+    if env.pinky["spawned"]:
+        pinky_coordinates = env.pinky["coordinates"][0]
+    else:
+        pinky_coordinates = [80, 80]
+
+    if env.inky["spawned"]:
+        inky_coordinates = env.inky["coordinates"][0]
+    else:
+        inky_coordinates = [80, 80]
+
+    if env.clyde["spawned"]:
+        clyde_coordinates = env.clyde["coordinates"][0]
+    else:
+        clyde_coordinates = [80, 80]
+    pacman_coordinates = env.pacman[0]
+    inputs = np.array([
+        blinky_coordinates[0] / 160.0, 
+        blinky_coordinates[1] / 180.0, 
+        pinky_coordinates[0] / 160.0, 
+        pinky_coordinates[1] / 180.0, 
+        inky_coordinates[0] / 160.0, 
+        inky_coordinates[1] / 180.0, 
+        clyde_coordinates[0] / 160.0, 
+        clyde_coordinates[1] / 180.0, 
+        pacman_coordinates[0] / 160.0, 
+        pacman_coordinates[1] /180.0])
+    inputs = torch.tensor(inputs, dtype=torch.float, device=device)
+    return inputs, blinky_coordinates, pinky_coordinates, inky_coordinates, clyde_coordinates, pacman_coordinates
+
 epsilon = 0.99
 epsilon_decay_rate = 0.999999
 # Training loop
@@ -39,36 +71,8 @@ for i_episode in range(10000):
     step_count = 0
     while True:
         step_count += 1
-        blinky_coordinates = env.blinky["coordinates"][0]
-        if env.pinky["spawned"]:
-            pinky_coordinates = env.pinky["coordinates"][0]
-        else:
-            pinky_coordinates = [80, 80]
-
-        if env.inky["spawned"]:
-            inky_coordinates = env.inky["coordinates"][0]
-        else:
-            inky_coordinates = [80, 80]
-
-        if env.clyde["spawned"]:
-            clyde_coordinates = env.clyde["coordinates"][0]
-        else:
-            clyde_coordinates = [80, 80]
-        pacman_coordinates = env.pacman[0]
-        inputs = np.array([
-            blinky_coordinates[0] / 160.0, 
-            blinky_coordinates[1] / 180.0, 
-            pinky_coordinates[0] / 160.0, 
-            pinky_coordinates[1] / 180.0, 
-            inky_coordinates[0] / 160.0, 
-            inky_coordinates[1] / 180.0, 
-            clyde_coordinates[0] / 160.0, 
-            clyde_coordinates[1] / 180.0, 
-            pacman_coordinates[0] / 160.0, 
-            pacman_coordinates[1] /180.0])
-        inputs = torch.tensor(inputs, dtype=torch.float, device=device)
-
-
+        inputs, blinky_coordinates, pinky_coordinates, inky_coordinates, clyde_coordinates, pacman_coordinates = get_inputs()
+        
         # Got help from GenAI to figure out how to pass in the target action 
         blinky_distances = []
         blinky_actions = [
