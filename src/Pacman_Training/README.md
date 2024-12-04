@@ -1,4 +1,4 @@
-<h3>Training Pacman on GPU</h3>
+<h3>Steps to Enable Cuda (To Train Pacman on GPU)</h3>
 <ul>
 <li>Set up an anaconda environment running python version 3.11.5</li>
 <li>Install the Cuda Toolkit 12.4 for your computer's operating system: https://developer.nvidia.com/cuda-12-4-0-download-archive</li> 
