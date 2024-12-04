@@ -9,7 +9,7 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
 ### Features
 - Pacman AI
    - Trained with double-DQN algorithm and a convolution neural network
-   - Utilizes the pre-existing Pacman ALE enviornment to train with deep RL
+   - Utilizes the pre-existing Pacman ALE environment to train with deep RL
    - Run presaved neural networks against the ghosts
 - Ghost AI
    - Custom built environment for ghosts to train
@@ -18,16 +18,23 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
 
 ---
 ### Document Overview
-- Pacman_Training Directory:
-  - Pacman_reload_dqn.py: Saves and loads a state in the RL process
-  - Test.py: Run test games against default ghosts with a saved neural network
+- src/Pacman_Training Directory:
+  - Pacman_reload_dqn.py: Functions for saving/loading the policy network, target network, hyperparameters, and results. 
+  - Test.py: Test running a Pac-Man policy against the default ghosts. 
   - pacman_dqn_implementation.py: DQN implementation of training Pacman
-  - pacman_neural_network.py: Defines the Deep Q Network with pytorch
-- Custom_Enviornment Directory:
-  - custom_pacman_env.py: Custom built pacman enviornment to train ghosts
-  - ghosts_ffn.py: Feed forward neural network for ghosts
-  - ghost_training.py: Train ghosts in custom enviornment
-  - test_pacman_env.py: Test pacman model against ghost model
+  - pacman_neural_network.py: The CNN used for the policy_net and target_net in the DQN. 
+  - Saved_Results/: Contains a comprehensive history of training results. 
+  - previous_run/: The location where saved results from running pacman_dqn_implementation.py are stored. 
+  - Archive/: Contains old python files that were used to experiment with Deep Q-Learning and the ALE Gymnasium environment. 
+- src/Custom_Environment Directory:
+  - custom_pacman_env.py: Custom built pacman Gymnasium environment to train ghosts
+  - ghosts_ffn.py: Feed forward neural network used in the RL implementation for ghosts. 
+  - ghost_training.py: RL implementation for training ghosts. 
+  - test_pacman_env.py: Test the ghosts policy against the existing Pac-Man policy. 
+  - policy_net.pth: The policy which Pac-Man follows in the custom environment. 
+  - Saved_Results/: Results from training the ghosts. 
+  - util/: Contains the file display_grid.py, which was used to analyze the pixel values/locations of the observation space in order to design the custom gymnasium environment. 
+  - resources/: Various resources used to analyze the state space for recreation. 
 ---
 ### Getting Started
 1) Clone the repository:
@@ -45,8 +52,8 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
     - Run src/Pacman_Training/Test.py file
 
 6) Running a saved Ghost model:
-    - Upload saved ghost_policy_net.pth to src/Custom_Enviornment/previous_run, or use the pre-existing src/Custom_Environment/previous_run/ghost_policy_net.pth file.
-    - Run src/Custom_Enviornment/test_pacman_env.py
+    - Upload saved ghost_policy_net.pth to src/Custom_Environment/previous_run, or use the pre-existing src/Custom_Environment/previous_run/ghost_policy_net.pth file.
+    - Run src/Custom_Environment/test_pacman_env.py
 
 7) Generating policy_net.pth files
     - Pacman policies are saved to src/Pacman_Training/previous_run after running src/Pacman_Training/pacman_dqn_implementation.py.
