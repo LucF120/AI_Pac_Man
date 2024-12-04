@@ -45,7 +45,7 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
     - Run src/Pacman_Training/Test.py file
 
 6) Running a saved Ghost model:
-    - Upload saved policy_net.pth to src/Custom_Enviornment, or use the pre-existing src/Custom_Environment/policy_net.pth file.
+    - Upload saved ghost_policy_net.pth to src/Custom_Enviornment/previous_run, or use the pre-existing src/Custom_Environment/previous_run/ghost_policy_net.pth file.
     - Run src/Custom_Enviornment/test_pacman_env.py
 
 7) Generating policy_net.pth files
