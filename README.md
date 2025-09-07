@@ -1,5 +1,5 @@
 # Reinforcement Learning in Pac-Man
-Allen Xu, Iba Baig, Luc Ferrara, Vishy Kamalapuram
+Luc Ferrara, Allen Xu, Iba Baig, Vishy Kamalapuram
 
 ---
 ### Project Overview
@@ -38,7 +38,7 @@ In this project, we aim to build an enhanced version of the Pac-Man game that co
 ---
 ### Getting Started
 1) Clone the repository:
-`git clone https://github.com/allenyxu2004/CS4100_Pac_Man.git`
+`git clone https://github.com/lucf120/CS4100_Pac_Man.git`
 
 2) Navigate to project directory
 
